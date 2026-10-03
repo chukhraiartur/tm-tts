@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Draft** (setup option «Драфт»). The old draft passed cards automatically as soon as every player had exactly the
+  expected number of cards in the hidden draft zone. It gave no feedback and hung silently on any mistake. Now, during
+  the draft only, every player sees their own button on the right side of the screen: red «Не готов передать карты»,
+  green «Готов передать карты» after a click. The button also shows the direction (← clockwise in even generations,
+  → counter-clockwise in odd ones). When all players are ready, the script checks the cards: the right number in the
+  draft zone, the rest in the hand, nothing held. If something is wrong, it tells the player and resets their button.
+  Otherwise the remaining cards go to the neighbour. The last card joins the hand by itself, the draft zones are removed
+  and the buying phase starts. The chat shows who is ready (`N/M`) and the current round. The on-screen tip now says
+  where to put the card (the zone *below* the hand, not above).
+
 ### Added
 
 - **Venus standard project** «Очистка воздуха» (15 M€). The Venus board now has a button on its standard project, like

@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Changed:** the draft now has a per-player «ready to pass cards» button (red/green, with the passing direction).
+  Cards are passed when everyone is ready, and mistakes are reported in chat instead of hanging the game.
 - **Added:** the Venus standard project «Очистка воздуха» (15 M€) is now a button: it pays 15 M€, raises Venus by one
   step and gives 1 TR, like the standard projects on the Mars board.
 - **Fixed:** the «Всего городов» (total cities) counter now counts every city tile on the table: Mars, Ganymede Colony,
@@ -44,7 +46,9 @@ Most of the game flow is scripted. Players mainly play cards and place tiles.
   city.
 - **Global parameters.** Oxygen and temperature markers have +/- buttons. The ocean stack shows how many oceans are
   left (`N / 9`). The generation marker moves along the track by itself.
-- **Research.** Card buying at 3 M€ each, with an optional draft. The «СБРОС» (discard) button returns a player's hand
+- **Research.** Card buying at 3 M€ each, with an optional draft from generation 2 on: each player drags one card
+  into the draft zone below their hand and presses their «ready to pass» button. When everyone is ready, the remaining
+  cards go to the neighbour: clockwise (←) in even generations, counter-clockwise (→) in odd ones. The «СБРОС» (discard) button returns a player's hand
   cards to the correct discard piles.
 - **Board scoring.** The chat command `!поле` highlights tiles and prints city and greenery points per player
   (see [Future improvements](#future-improvements)). The command `!поле ` (with a trailing space) clears the labels.
@@ -169,6 +173,8 @@ in the TTS save file.
 
 Notes:
 
+- **Load the save before you edit.** When TTS loads a game, the extension overwrites all files in `.tts/` with the
+  scripts from that game. Local edits not yet sent with Save and Play are lost.
 - The extension sends only the objects it currently knows about. They are registered when TTS loads a game or when
   you run **Get Objects**. After restarting VS Code without reloading the table, run Get Objects first, otherwise
   Save and Play sends nothing and your local edits are overwritten by the old scripts.
@@ -185,6 +191,8 @@ Notes:
 - **Tharsis Republic house rule.** Test a small nerf of the corporation, changing one parameter at a time.
 - **Venus track bonuses.** Raising Venus to 8% should give a card and to 16% an extra TR. Neither the `+` button on
   the Venus board nor the standard project handles these bonuses yet (the thermometer already handles its heat bonuses).
+- **Resume the draft after a reload.** The research phase (`STEP = 5`) is not restored in `onLoad`, so reloading the
+  table in the middle of a draft loses the draft state.
 - **Undo support for the city counters.** After `Ctrl+Z` the counters update only on the next action with a city tile.
 - **Original author's TODO list** (from the header of `Global.lua`): automatic colony trading, automatic placement of
   neutral delegates, delegate handling as in the rules, moving global parameter counters into the Global script,

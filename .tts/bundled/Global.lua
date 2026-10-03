@@ -399,9 +399,9 @@ function reserch() -- фаза исследований (подготовка)
 	deal4card()  -- выдача карт
 	if configs.draft then
 		--Notes.setNotes('ДРАФТ ПРОЕКТОВ\n\nПосле получения карт выберите 1 и передайте остальные (для выбора, переместите карту из руки в зону над ней), повторяйте пока вам не передадут последнюю карту. Теперь это ваши карты для покупки, выберите и купите нужные.')
-		setTip('ДРАФТ ПРОЕКТОВ', 'После получения карт выберите 1 и передайте остальные (для выбора, переместите карту из руки в зону над ней), повторяйте пока вам не передадут последнюю карту. Теперь это ваши карты для покупки, выберите и купите нужные.')
+		setTip('ДРАФТ ПРОЕКТОВ', 'Перетащите 1 карту из руки в драфтовую зону под рукой и нажмите кнопку драфта справа (станет зеленой). Когда все будут готовы, оставшиеся карты уйдут соседу. Повторяйте, пока не наберете 4 карты, затем купите нужные.')
 		spawnDraftHand()
-		drafting(0, 4)
+		startDraft()
 	else
 		buyCard() -- этап покупки карт
 	end
@@ -531,7 +531,37 @@ function setUI()  -- создание интерфейса
 			✘
 		</Text>]]
 	end
-	Global.UI.setXml(UI[1] .. XML .. UI[2])
+	-- панель драфта: у каждого игрока своя кнопка, видимая только ему
+	local draftXML = [[
+<Panel
+		id="DraftPanel"
+		width="300"
+		height="100"
+		active="false"
+		allowDragging="true"
+		rectAlignment="MiddleRight"
+		returnToOriginalPositionWhenReleased="false"
+		offsetXY="0 135"
+		color="#00000000"
+		>]]
+	for _, clr in ipairs(Global.getVar("playersTurns")) do
+		draftXML = draftXML ..[[
+	<Button
+			id="Draft]].. clr ..[["
+			visibility="]].. clr ..[["
+			onClick="toggleDraftReady"
+			fontSize="24"
+			fontStyle="Bold"
+			textColor="#FF4040"
+			colors="#000000B0|#202020C0|#303030D0|#00000060"
+			>
+		Не готов передать карты
+	</Button>]]
+	end
+	draftXML = draftXML ..[[
+</Panel>]]
+
+	Global.UI.setXml(UI[1] .. XML .. UI[2] .. draftXML)
 	Wait.time(function()
 		Global.UI.show("ActivePanel")
 	end, 1)
@@ -1209,38 +1239,87 @@ function removeDraftHand()  -- удаление рук для драфта
 		obj.destruct()
 	end
 end
-function drafting(num, count)  -- драфт
-	if count-num > 0 then
-		log("Ожидание ".. count-num .." карт в основной руке и ".. num .." в драфтовой")
-		Wait.condition(function()
-			if num != 0 then
-				swichHands(generation%2 == 1)
-			else
-				if generation%2 == 1 then
-					printToAll("Драфт против часовой ( → )")
-				else
-					printToAll("Драфт по часовой ( ← )")
-				end
-			end
-			drafting(num+1, count)
-		end, function()  -- ожидание нужного количества карт в руках
-			chooseHand = true
-			draftHand = true
-			emptyHand = true
-			for _, color in pairs(playersTurns) do
-				chooseHand = chooseHand and #Player[color].getHandObjects(1) == count-num
-				draftHand = draftHand and #Player[color].getHandObjects(Player[color].getHandCount()) == num
-				if Player[color].getHoldingObjects() then
-					emptyHand = emptyHand and #Player[color].getHoldingObjects() == 0
-				end
-			end
-			return chooseHand and draftHand and emptyHand
-		end)
+DRAFT_CARDS = 4  -- карт на игрока в драфте
+
+function startDraft()  -- драфт: первый круг
+	draftRound = 1  -- сколько карт должно лежать в драфтовой зоне
+	draftClockwise = generation%2 == 0  -- четное поколение - по часовой, нечетное - против
+	if draftClockwise then
+		printToAll("Драфт по часовой ( ← )")
 	else
-		printToAll("Драфт завершен!")
-		removeDraftHand()
-		buyCard()
+		printToAll("Драфт против часовой ( → )")
 	end
+	resetDraftReady()
+	Global.UI.show("DraftPanel")
+end
+function resetDraftReady()  -- все кнопки драфта в "не готов"
+	draftReady = {}
+	for _, color in ipairs(playersTurns) do
+		draftReady[color] = false
+		updateDraftButton(color)
+	end
+end
+function updateDraftButton(color)  -- текст и цвет кнопки драфта игрока
+	local arrow = draftClockwise and "←  по часовой" or "против часовой  →"
+	if draftReady[color] then
+		Global.UI.setValue("Draft".. color, "Готов передать карты\n".. arrow)
+		Global.UI.setAttribute("Draft".. color, "textColor", "#40FF40")
+	else
+		Global.UI.setValue("Draft".. color, "Не готов передать карты\n".. arrow)
+		Global.UI.setAttribute("Draft".. color, "textColor", "#FF4040")
+	end
+end
+function toggleDraftReady(player)  -- нажатие кнопки драфта
+	if draftReady == nil or draftReady[player.color] == nil then return end
+	draftReady[player.color] = not draftReady[player.color]
+	updateDraftButton(player.color)
+
+	if draftReady[player.color] then
+		local ready = 0
+		for _, color in ipairs(playersTurns) do
+			if draftReady[color] then ready = ready + 1 end
+		end
+		printToAll(player.color .." готов передать карты (".. ready .."/".. #playersTurns ..")")
+		checkDraft()
+	end
+end
+function checkDraft()  -- все готовы -> проверка карт и передача соседу
+	for _, color in ipairs(playersTurns) do
+		if not draftReady[color] then return end
+	end
+
+	local wrong = {}
+	for _, color in ipairs(playersTurns) do
+		local picked = #Player[color].getHandObjects(Player[color].getHandCount())
+		local left = #Player[color].getHandObjects(1)
+		local holding = #(Player[color].getHoldingObjects() or {})
+		if picked ~= draftRound or left ~= DRAFT_CARDS - draftRound or holding > 0 then
+			broadcastToColor("Драфт: в драфтовой зоне должно быть ".. draftRound .." карт(ы), в руке - ".. DRAFT_CARDS - draftRound, color, {1, 0.3, 0.3})
+			draftReady[color] = false
+			updateDraftButton(color)
+			table.insert(wrong, color)
+		end
+	end
+	if #wrong > 0 then
+		printToAll("Драфт: проверьте карты - ".. table.concat(wrong, ", "), {1, 0.5, 0})
+		return
+	end
+
+	swichHands(not draftClockwise)
+	draftRound = draftRound + 1
+	if draftRound == DRAFT_CARDS then  -- осталось по 1 карте: она переходит в руку сама
+		Wait.time(finishDraft, 1)
+	else
+		printToAll("Драфт: круг ".. draftRound .."/".. DRAFT_CARDS)
+		resetDraftReady()
+	end
+end
+function finishDraft()  -- драфт завершен -> покупка карт
+	Global.UI.hide("DraftPanel")
+	draftReady = nil
+	printToAll("Драфт завершен!")
+	removeDraftHand()
+	buyCard()
 end
 function swichHands(dir)  -- обмен руками
 	hand = {}
