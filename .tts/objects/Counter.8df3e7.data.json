@@ -21,8 +21,8 @@
     "z": 0
   },
   "ColorDiffuse": {
-    "r": 0.39893505,
-    "g": 0.211392164,
+    "r": 0.39893502,
+    "g": 0.211392134,
     "b": 0
   },
   "LayoutGroupSortIndex": 0,
@@ -42,7 +42,7 @@
   "Counter": {
     "value": 0
   },
-  "LuaScript": "function onObjectLeaveZone()\r\n\tcityCheck()\r\nend\r\n\r\nfunction onObjectEnterZone()\r\n\tcityCheck()\r\nend\r\n\r\nfunction cityCheck()\r\n\tcityCount = 0\r\n\tfor _, tile in ipairs(getObjectFromGUID(\"f83d45\").getObjects(false)) do\r\n\t\tif tile.getDescription() == \"Город\" then\r\n\t\t\tcityCount = cityCount + 1\r\n\t\tend\r\n\tend\r\n\tfor _, tile in ipairs(getObjectFromGUID(\"62b7cb\").getObjects(false)) do\r\n\t\tif tile.getDescription() == \"Город\" then\r\n\t\t\tcityCount = cityCount + 1\r\n\t\tend\r\n\tend\r\n\tself.setValue(cityCount)\r\nend",
+  "LuaScript": "-- Счетчик городов\r\n-- ONLY_MARS = false: все города на столе (Марс, Ганимед, Фобос, Венера, Столица)\r\n-- ONLY_MARS = true:  только города на поверхности Марса\r\nONLY_MARS = false\r\n\r\n-- диск Марса на поле (мировые X/Z); Ганимед и Фобос лежат дальше радиуса\r\nMARS_CENTER = {x = 0.85, z = 0.29}\r\nMARS_RADIUS = 11.5\r\n\r\nlocal checkPending = false\r\n\r\nfunction onLoad()\r\n\tscheduleCityCheck()\r\nend\r\n\r\nfunction onObjectDrop(player_color, obj)\r\n\tif isCity(obj) then scheduleCityCheck() end\r\nend\r\n\r\nfunction onObjectDestroy(obj)\r\n\tif isCity(obj) then scheduleCityCheck() end\r\nend\r\n\r\nfunction onObjectEnterContainer(container, obj)\r\n\tif isCity(obj) then scheduleCityCheck() end\r\nend\r\n\r\nfunction scheduleCityCheck()  -- пересчет с задержкой, пока тайл не уляжется\r\n\tif checkPending then return end\r\n\tcheckPending = true\r\n\tWait.time(function()\r\n\t\tcheckPending = false\r\n\t\tcityCheck()\r\n\tend, 1)\r\nend\r\n\r\nfunction cityCheck()\r\n\tlocal cityCount = 0\r\n\tfor _, obj in ipairs(getObjects()) do\r\n\t\tif isCity(obj) and (not ONLY_MARS or isOnMars(obj)) then\r\n\t\t\tcityCount = cityCount + 1\r\n\t\tend\r\n\tend\r\n\tself.setValue(cityCount)\r\nend\r\n\r\nfunction isCity(obj)  -- обычные тайлы городов и Столица имеют описание \"Город\"\r\n\treturn obj.getDescription() == \"Город\"\r\nend\r\n\r\nfunction isOnMars(obj)\r\n\tlocal pos = obj.getPosition()\r\n\tlocal dx, dz = pos.x - MARS_CENTER.x, pos.z - MARS_CENTER.z\r\n\treturn dx * dx + dz * dz <= MARS_RADIUS * MARS_RADIUS\r\nend\r\n",
   "LuaScriptState": "",
   "XmlUI": ""
 }
