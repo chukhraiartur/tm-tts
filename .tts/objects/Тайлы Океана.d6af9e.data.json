@@ -1,0 +1,530 @@
+{
+  "GUID": "d6af9e",
+  "Name": "Custom_Model_Bag",
+  "Transform": {
+    "posX": 10.9250946,
+    "posY": 0.960000336,
+    "posZ": 11.6221008,
+    "rotX": -5.548821e-7,
+    "rotY": 270.006226,
+    "rotZ": 1.28916469e-7,
+    "scaleX": 1.10000026,
+    "scaleY": 1.10000026,
+    "scaleZ": 1.10000026
+  },
+  "Nickname": "Тайлы Океана",
+  "Description": "Повышают ваш ТР на +1 за каждый. Не имеют владельца.",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 0.840302,
+    "g": 0.840302,
+    "b": 0.840302
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomMesh": {
+    "MeshURL": "http://pastebin.com/raw/GY2rgWyb",
+    "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/108480551732302497/D6683DB76424BF78BB5463E4B67F17C20999F8C3/",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 3,
+    "TypeIndex": 6,
+    "CastShadows": true
+  },
+  "Bag": {
+    "Order": 0
+  },
+  "LuaScript": "function onLoad()\r\n\tholdOcean = #self.getObjects()\r\n\tif self.getButtons() then\r\n\t\tself.removeButton(1)\r\n\tend\r\n\t\r\n\tself.createButton({\r\n\t\tclick_function = \" \",\r\n\t\tfunction_owner = self,\r\n\t\tlabel = 9 - #self.getObjects() ..\" / 9\",\r\n\t\tposition = {0, 0.1, 0},\r\n\t\trotation = {0, -90, 0},\r\n\t\twidth = 0,\r\n\t\theight = 0,\r\n\t\tfont_size = 500,\r\n\t\tfont_color = {0.27, 0.77, 0.67},\r\n\t})\r\nend\r\n\r\nfunction onObjectLeaveContainer(container, object)\r\n\tholdOcean = countOceans()\r\n\tif self == container then\r\n\t\tself.editButton({\r\n\t\t\tindex = 0,\r\n\t\t\tlabel = 9 - countOceans() ..\" / 9\",\r\n\t\t})\r\n\tend\r\n\t\r\n\tfor _, player in pairs(Player.getPlayers()) do  -- нахождение игрока вытащевшего океан\r\n\t\tWait.time(function()\r\n\t\t\tif player.getHoldingObjects() then\r\n\t\t\t\tfor __, obj in pairs(player.getHoldingObjects()) do\r\n\t\t\t\t\tif obj == object and object.getDescription() == \"Океан\" then\r\n\t\t\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player.color]).setVar(\"RT\", getObjectFromGUID(Global.getVar(\"PLData\").resLists[player.color]).getVar(\"RT\") + 1)\r\n\t\t\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player.color]).call(\"RTupd\")\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tprintToAll(Player[player.color].steam_name .. \" выкладывает океан\",{0, 1, 0})\r\n\t\t\t\t\tend\r\n\t\t\t\tend\r\n\t\t\tend\r\n\t\tend, 0.1)\r\n\tend\r\nend\r\n\r\nfunction onObjectEnterContainer(container, object)\r\n\tholdOcean = countOceans()\r\n\tif self == container then\r\n\t\tself.editButton({\r\n\t\t\tindex = 0,\r\n\t\t\tlabel = 9 - countOceans() ..\" / 9\",\r\n\t\t})\r\n\tend\r\nend\r\n\r\nfunction countOceans()\r\n\tlocal count = 0\r\n\tfor _, obj in ipairs(self.getObjects()) do\r\n\t\tif obj.description == \"Океан\" then\r\n\t\t\tcount = count + 1\r\n\t\tend\r\n\tend\r\n\treturn count\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "c74da5",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 10.1470127,
+        "posY": 1.02165353,
+        "posZ": 11.5304174,
+        "rotX": 359.986542,
+        "rotY": 359.713562,
+        "rotZ": 359.960724,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "435821",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 10.6092958,
+        "posY": 1.02468836,
+        "posZ": 11.2361374,
+        "rotX": 359.959381,
+        "rotY": 359.7139,
+        "rotZ": 359.969238,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "9455a6",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 9.594604,
+        "posY": 1.0207274,
+        "posZ": 11.2666092,
+        "rotX": 359.966553,
+        "rotY": 359.9933,
+        "rotZ": 359.975067,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "c3e919",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 9.864548,
+        "posY": 1.01977932,
+        "posZ": 11.7997141,
+        "rotX": 359.958771,
+        "rotY": 359.903229,
+        "rotZ": 359.9848,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "a21001",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 10.3786964,
+        "posY": 1.01952231,
+        "posZ": 11.3970432,
+        "rotX": 359.975037,
+        "rotY": 359.737244,
+        "rotZ": 359.991455,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "261942",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 10.5135765,
+        "posY": 1.03290272,
+        "posZ": 11.0105848,
+        "rotX": 359.9928,
+        "rotY": 359.63,
+        "rotZ": -0.00411433959,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "fc2abd",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 10.27198,
+        "posY": 1.03303981,
+        "posZ": 11.4563694,
+        "rotX": 359.981445,
+        "rotY": 359.6909,
+        "rotZ": 359.99234,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "26cdab",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 10.5774355,
+        "posY": 1.031274,
+        "posZ": 11.7562437,
+        "rotX": 0.0000126783307,
+        "rotY": 270.000061,
+        "rotZ": -0.00000599077339,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "f3c81d",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 10.2571278,
+        "posY": 1.03300214,
+        "posZ": 12.2895489,
+        "rotX": 1.48999121e-7,
+        "rotY": 180.000778,
+        "rotZ": 4.3637047e-7,
+        "scaleX": 0.6749987,
+        "scaleY": 2.76801062,
+        "scaleZ": 0.6749987
+      },
+      "Nickname": "",
+      "Description": "Океан",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ColorDiffuse": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/92729662233321935/BF7BBE164A4F132EAC328152562DF96DA20C92B4/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 1,
+        "TypeIndex": 4,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    }
+  ]
+}

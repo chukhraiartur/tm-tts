@@ -1,0 +1,48 @@
+{
+  "GUID": "8df3e7",
+  "Name": "Counter",
+  "Transform": {
+    "posX": 10.0596237,
+    "posY": 0.4392876,
+    "posZ": -8.47415352,
+    "rotX": -2.91116976e-7,
+    "rotY": -0.0000101798378,
+    "rotZ": 6.675931e-7,
+    "scaleX": 0.8000002,
+    "scaleY": 0.8000002,
+    "scaleZ": 0.8000002
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 0.39893505,
+    "g": 0.211392164,
+    "b": 0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "Counter": {
+    "value": 0
+  },
+  "LuaScript": "function onObjectLeaveZone()\r\n\tcityCheck()\r\nend\r\n\r\nfunction onObjectEnterZone()\r\n\tcityCheck()\r\nend\r\n\r\nfunction cityCheck()\r\n\tcityCount = 0\r\n\tfor _, tile in ipairs(getObjectFromGUID(\"f83d45\").getObjects(false)) do\r\n\t\tif tile.getDescription() == \"Город\" then\r\n\t\t\tcityCount = cityCount + 1\r\n\t\tend\r\n\tend\r\n\tfor _, tile in ipairs(getObjectFromGUID(\"62b7cb\").getObjects(false)) do\r\n\t\tif tile.getDescription() == \"Город\" then\r\n\t\t\tcityCount = cityCount + 1\r\n\t\tend\r\n\tend\r\n\tself.setValue(cityCount)\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

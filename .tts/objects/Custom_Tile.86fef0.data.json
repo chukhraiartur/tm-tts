@@ -1,0 +1,57 @@
+{
+  "GUID": "86fef0",
+  "Name": "Custom_Tile",
+  "Transform": {
+    "posX": -35.0000076,
+    "posY": 0.9771673,
+    "posZ": 4.234779e-7,
+    "rotX": 0.0983590856,
+    "rotY": 90.00008,
+    "rotZ": -2.16778773e-7,
+    "scaleX": 10,
+    "scaleY": 1,
+    "scaleZ": 10
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/28811811913646533/57E576D782B53554FD38240F2CD1D9AA03143923/",
+    "ImageSecondaryURL": "https://steamusercontent-a.akamaihd.net/ugc/28811811913646533/57E576D782B53554FD38240F2CD1D9AA03143923/",
+    "ImageScalar": 1,
+    "WidthScale": 0,
+    "CustomTile": {
+      "Type": 0,
+      "Thickness": 0.2,
+      "Stackable": false,
+      "Stretch": true
+    }
+  },
+  "LuaScript": "buttonsData = {\r\n\t{tooltip = \"ЭРА КОРПОРАЦИЙ\\n\\n67 проектов\\n+4 промо проекта\\n2 корпорации\",\r\n\tposition = {-0.4, 0.3, -0.781}, click_function = \"FeraCorp\"},\r\n\t{tooltip = \"ПРОЛОГ\\n\\n35 прологов\\n7 проектов\\n5 корпораций\",\r\n\tposition = {-0.4, 0.3, -0.673}, click_function = \"Fprologe\"},\r\n\t{tooltip = \"ВЕНЕРА\\n\\nПоле Венеры\\n49 проектов\\n5 корпораций\",\r\n\tposition = {-0.4, 0.3, -0.565}, click_function = \"Fvenus\"},\r\n\t{tooltip = \"КОЛОНИИ\\n\\n11 колоний\\n49 проектов\\n5 корпораций\",\r\n\tposition = {-0.4, 0.3, -0.457}, click_function = \"Fcolony\"},\r\n\t{tooltip = \"КРИЗИС\\n\\nПоле событий\\nПолитическое поле\\n36 событий\\n17 проектов\\n6 корпораций\",\r\n\tposition = {-0.4, 0.3, -0.349}, click_function = \"Fcrisis\"},\r\n\t{tooltip = \"ПЕРВООТКРЫВАТЕЛИ\\n\\nПоле влияния\\n10 специальных тайлов\\n6 событий\\n16 прологов\\n2 колонии\\n60 проектов\\n23 корпораций\",\r\n\tposition = {-0.4, 0.3, -0.241}, click_function = \"Fpathfinders\"},\r\n\t{tooltip = \"АРЕС\\n\\n23 проектов (11 обновленных старых)\\n22 специальных тайлов (11 обновленных старых)\",\r\n\tposition = {-0.4, 0.3, -0.133}, click_function = \"Fares\"},\r\n\t{tooltip = \"ПОДЗЕМНЫЙ МИР\\n\\n91 жетон подземных ресурсов\\n92 проекта\\n12 корпораций\\n15 прологов\\n5 событий\\n3 колонии\",\r\n\tposition = {-0.4, 0.3, -0.025}, click_function = \"Funderworld\"},\r\n\t{tooltip = \"СПОНСОРСТВО\\n\\n26 жетонов спонсоров\",\r\n\tposition = {-0.4, 0.3, 0.083}, click_function = \"Fsponsorship\"},\r\n\t\r\n\t{tooltip = \"Количество корпораций для выбора\",\r\n\tposition = {0.4, 0.3, -0.781}, click_function = \"FcorpCount\"},\r\n\t{tooltip = \"Количество прологов для выбора\",\r\n\tposition = {0.4, 0.3, -0.673}, click_function = \"FprologeCount\"},\r\n\t{tooltip = \"Выбор игрового поля: база, Эллада, Элизий\",\r\n\tposition = {0.4, 0.3, -0.565}, click_function = \"Fmap\"},\r\n\t{tooltip = \"Правительственная поддержка:\\nВ конце поколения первый игрок повышает 1 из глобальных параметров не получая от этого бонусов\",\r\n\tposition = {0.4, 0.3, -0.457}, click_function = \"Fsupport\"},\r\n\t{tooltip = \"Перерасчет РТ:\\nУменьшать ли РТ в фазе солнечной системы при игре с дополнением 'Кризис'\",\r\n\tposition = {0.4, 0.3, -0.349}, click_function = \"Fminusrt\"},\r\n\t{tooltip = \"Драфт:\\nВ фазе исследования игроки будут обмениваться картами, что повысит контроль над картами и позволит посмотреть больше вариантов\",\r\n\tposition = {0.4, 0.3, -0.241}, click_function = \"Fdraft\"},\r\n\t{tooltip = \"Обязательное терраформирование Венеры:\\nДля окончания игры необходимо полное терраформирование Венеры\\nПри включенной Правительственной поддержке будет вариант повышения Венеры\",\r\n\tposition = {0.4, 0.3, -0.133}, click_function = \"FreqVenus\"},\r\n\t{tooltip = 'Случайные достижения и награды:\\nЗаменяет достижения и награды поля на 5 (6 при игре с \"Венерой\") случайных жетонов из 62 возможных',\r\n\tposition = {0.4, 0.3, -0.025}, click_function = \"FrandomMA\"},\r\n\t{tooltip = \"Настраиваемый старт:\\nВ начале игры игроки получают несколько жетонов достижений, наград, колоний и спонсоров, они могут выбрать какие из них будут выложены на стол, остальные будут убраны.\\n0 - выключено\\n2-4 - количество выдаваемых жетонов каждого типа\",\r\n\tposition = {0.4, 0.3, 0.083}, click_function = \"FcontrolStart\"},\r\n\t\r\n\t{tooltip = \"Закончить подготовку и начать игру!\",\r\n\tposition = {0, 0.3, 0.9}, scale = {0.4, 1, 0.4}, click_function = \"finishSetup\"},\r\n}\r\nchecksData = {\r\n\t{tooltip = \"eraCorp\",\t\tposition = {-0.9, 0.2, -0.781}},\r\n\t{tooltip = \"prologe\",\t\tposition = {-0.9, 0.2, -0.673}},\r\n\t{tooltip = \"venus\",\t\t\tposition = {-0.9, 0.2, -0.565}},\r\n\t{tooltip = \"colony\",\t\tposition = {-0.9, 0.2, -0.457}},\r\n\t{tooltip = \"crisis\",\t\tposition = {-0.9, 0.2, -0.349}},\r\n\t{tooltip = \"pathfinders\",\tposition = {-0.9, 0.2, -0.241}},\r\n\t{tooltip = \"ares\",\t\t\tposition = {-0.9, 0.2, -0.133}},\r\n\t{tooltip = \"underworld\",\tposition = {-0.9, 0.2, -0.025}},\r\n\t{tooltip = \"sponsorship\",\tposition = {-0.9, 0.2, 0.083}},\r\n\t\r\n\t{tooltip = \"corpCount\",\t\tposition = {0.9, 0.2, -0.781}},\r\n\t{tooltip = \"prologeCount\",\tposition = {0.9, 0.2, -0.673}},\r\n\t{tooltip = \"map\",\t\t\tposition = {0.77, 0.2, -0.565}},\r\n\t{tooltip = \"support\",\t\tposition = {0.9, 0.2, -0.457}},\r\n\t{tooltip = \"minusrt\",\t\tposition = {0.9, 0.2, -0.349}},\r\n\t{tooltip = \"draft\",\t\t\tposition = {0.9, 0.2, -0.241}},\r\n\t{tooltip = \"reqVenus\",\t\tposition = {0.9, 0.2, -0.133}},\r\n\t{tooltip = \"randomMA\",\t\t\tposition = {0.9, 0.2, -0.025}},\r\n\t{tooltip = \"controlStart\",\tposition = {0.9, 0.2, 0.083}},\r\n}\r\n\r\nconfig = {\r\n\teraCorp = false,\r\n\tprologe = false,\r\n\tvenus = false,\r\n\tcolony = false,\r\n\tcrisis = false,\r\n\tpathfinders = false,\r\n\tares = false,\r\n\tunderworld = false,\r\n\tsponsorship = false,\r\n\t\r\n\tcorpCount = 2,\r\n\tprologeCount = 4,\r\n\tmap = 1,\r\n\tsupport = false,\r\n\tminusrt = true,\r\n\tdraft = false,\r\n\treqVenus = false,\r\n\trandomMA = false,\r\n\tcontrolStart = 0,\r\n}\r\n\r\n\r\nfunction onLoad()\r\n\tself.clearButtons()\r\n\t\r\n\tfor _, button in ipairs(buttonsData) do\r\n\t\taddButton(button)\r\n\tend\r\n\tfor _, check in ipairs(checksData) do\r\n\t\taddCheck(check)\r\n\tend\r\n\tfor _, cfg in pairs(config) do\r\n\t\tif type(cfg) == \"boolean\" then\r\n\t\t\tupdateCheck(_)\r\n\t\telse\r\n\t\t\tupdateCheck(_, config[_])\r\n\t\tend\r\n\tend\r\n\tupdateCheck(\"map\", \"База\")\r\nend\r\n\r\n\r\nfunction FeraCorp()\r\n\tconfig.eraCorp = not config.eraCorp\r\n\tupdateCheck(\"eraCorp\")\r\nend\r\nfunction Fprologe()\r\n\tconfig.prologe = not config.prologe\r\n\tupdateCheck(\"prologe\")\r\nend\r\nfunction Fvenus()\r\n\tconfig.venus = not config.venus\r\n\tupdateCheck(\"venus\")\r\nend\r\nfunction Fcolony()\r\n\tconfig.colony = not config.colony\r\n\tupdateCheck(\"colony\")\r\nend\r\nfunction Fcrisis()\r\n\tconfig.crisis = not config.crisis\r\n\tupdateCheck(\"crisis\")\r\nend\r\nfunction Fpathfinders()\r\n\tconfig.pathfinders = not config.pathfinders\r\n\tupdateCheck(\"pathfinders\")\r\nend\r\nfunction Fares()\r\n\tconfig.ares = not config.ares\r\n\tupdateCheck(\"ares\")\r\nend\r\nfunction Funderworld()\r\n\tconfig.underworld = not config.underworld\r\n\tupdateCheck(\"underworld\")\r\nend\r\nfunction Fsponsorship()\r\n\tconfig.sponsorship = not config.sponsorship\r\n\tupdateCheck(\"sponsorship\")\r\nend\r\n\r\nfunction FcorpCount()\r\n\tconfig.corpCount = config.corpCount % 8 +1\r\n\tupdateCheck(\"corpCount\", config.corpCount)\r\nend\r\nfunction FprologeCount()\r\n\tconfig.prologeCount = (config.prologeCount+1) % 17\r\n\tupdateCheck(\"prologeCount\", config.prologeCount)\r\nend\r\nfunction Fmap()\r\n\tconfig.map = config.map % 3 +1\r\n\tname = {\"База\", \"Эллада\", \"Элизий\"}\r\n\tupdateCheck(\"map\", name[config.map])\r\nend\r\nfunction Fsupport()\r\n\tconfig.support = not config.support\r\n\tupdateCheck(\"support\")\r\nend\r\nfunction Fminusrt()\r\n\tconfig.minusrt = not config.minusrt\r\n\tupdateCheck(\"minusrt\")\r\nend\r\nfunction Fdraft()\r\n\tconfig.draft = not config.draft\r\n\tupdateCheck(\"draft\")\r\nend\r\nfunction FreqVenus()\r\n\tconfig.reqVenus = not config.reqVenus\r\n\tupdateCheck(\"reqVenus\")\r\nend\r\nfunction FrandomMA()\r\n\tconfig.randomMA = not config.randomMA\r\n\tupdateCheck(\"randomMA\")\r\nend\r\nfunction FcontrolStart()\r\n\tconfig.controlStart = (config.controlStart +1) % 5\r\n\tif config.controlStart == 1 then\r\n\t\tconfig.controlStart = 2\r\n\tend\r\n\tupdateCheck(\"controlStart\", config.controlStart)\r\nend\r\n\r\nfunction finishSetup()\r\n\tGlobal.call(\"setup\")\r\nend\r\n\r\n\r\n\r\nfunction updateCheck(check, value)\r\n\tfor _, button in pairs(self.getButtons()) do\r\n\t\tif button.tooltip == check then\r\n\t\t\tif value == nil then\r\n\t\t\t\tif config[check] then\r\n\t\t\t\t\tself.editButton({index = button.index, label = \"✔\"})\r\n\t\t\t\telse\r\n\t\t\t\t\tself.editButton({index = button.index, label = \"✘️\"})\r\n\t\t\t\tend\r\n\t\t\telse\r\n\t\t\t\tself.editButton({index = button.index, label = value})\r\n\t\t\tend\r\n\t\tend\r\n\tend\r\nend\r\nfunction addButton(param)\r\n\tdefault = {\r\n\t\tclick_function = \" \",\r\n\t\tfunction_owner = self,\r\n\t\ttooltip = \" \",\r\n\t\tposition = {0, 0.3, 0},\r\n\t\trotation = {0, 0, 0},\r\n\t\tscale = {0.55, 1, 0.4},\r\n\t\twidth = 800,\r\n\t\theight = 100,\r\n\t\tfont_size = 120,\r\n\t\tcolor = {1, 1, 1, 0},\r\n\t\thover_color = {1, 1, 1, 0.07},\r\n\t\tpress_color = {0.99, 0.54, 0, 0.3},\r\n\t}\r\n\tfor edit, value in pairs(param) do\r\n\t\tdefault[edit] = value\r\n\tend\r\n\tself.createButton(default)\r\nend\r\nfunction addCheck(param)\r\n\tdefault = {\r\n\t\tclick_function = \" \",\r\n\t\tfunction_owner = self,\r\n\t\tlabel = \"✘️\",\r\n\t\tposition = {0, 0.3, 0},\r\n\t\trotation = {0, 0, 0},\r\n\t\tscale = {0.15, 1, 0.15},\r\n\t\twidth = 0,\r\n\t\theight = 0,\r\n\t\tfont_size = 300,\r\n\t\tcolor = {1, 1, 1},\r\n\t\tfont_color = {1, 0.44, 0},\r\n\t}\r\n\tfor edit, value in pairs(param) do\r\n\t\tdefault[edit] = value\r\n\tend\r\n\tself.createButton(default)\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

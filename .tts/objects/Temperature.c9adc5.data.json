@@ -1,0 +1,57 @@
+{
+  "GUID": "c9adc5",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": 14.2973166,
+    "posY": 0.797893167,
+    "posZ": -7.741105,
+    "rotX": -2.07232546e-7,
+    "rotY": 180.000778,
+    "rotZ": 0.00000205578567,
+    "scaleX": 0.737312138,
+    "scaleY": 1,
+    "scaleZ": 0.737312138
+  },
+  "Nickname": "Temperature",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "http://i.imgur.com/OOfP6IX.png",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1,
+    "WidthScale": 0,
+    "CustomToken": {
+      "Thickness": 0.2,
+      "MergeDistancePixels": 15,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "temperature = {\r\n\t{14.29, 1.51,10.30},\r\n\t{14.30, 1.51, 9.42},\r\n\t{14.33, 1.51, 8.55},\r\n\t{14.36, 1.51, 7.62},\r\n\t{14.34, 1.51, 6.72},\r\n\t{14.36, 1.51, 5.85},\r\n\t{14.35, 1.51, 4.95},\r\n\t{14.34, 1.51, 4.04},\r\n\t{14.36, 1.51, 3.16},\r\n\t{14.29, 1.51, 2.25},\r\n\t{14.32, 1.51, 1.34},\r\n\t{14.30, 1.51, 0.43},\r\n\t{14.31, 1.51, -0.45},\r\n\t{14.32, 1.51, -1.33},\r\n\t{14.36, 1.51, -2.22},\r\n\t{14.39, 1.51, -3.14},\r\n\t{14.39, 1.51, -4.05},\r\n\t{14.39, 1.51, -4.95},\r\n\t{14.40, 1.51, -5.83},\r\n\t{14.27, 1.51, -7.16},\r\n}\r\n\r\n\r\nfunction onLoad(saved_data)\r\n\tif saved_data ~= \"\" and saved_data ~= nil then\r\n    \t\t\tlocal loaded_data = JSON.decode(saved_data)\r\n    index = loaded_data.tempIndex\r\n\telse\r\n    index = #temperature\r\n\tend\r\n    self.createButton({\r\n         click_function = 'increaseTemp',\r\n            label = '+',\r\n            function_owner = self,\r\n            position = { 0, 0.2, 0.9},\r\n            rotation = {0, 0, 0},\r\n            width = 1000,\r\n            height = 500,\r\n            font_size = 450,\r\n            color = {1, 0, 0}\r\n        })\r\n    self.createButton({\r\n            click_function = 'decreaseTemp',\r\n            label = '-',\r\n            function_owner = self,\r\n            position = { 0, 0.2, 2.1},\r\n            rotation = {0, 0, 0},\r\n            width = 500,\r\n            height = 500,\r\n            font_size = 450,\r\n            color = {0.52941176470588, 0.8078431372549, 0.92156862745098}\r\n        })\r\n    end\r\n\r\nfunction increaseTemp(object, color)\r\n    index = index - 1\r\n    if index > 0 then\r\n        tempMarker = getObjectFromGUID(\"f1bfac\")\r\n        tempMarker.setPositionSmooth(temperature[index])\r\n\t\t\r\n\t\tif color then\r\n\t\t\tprintToAll(Player[color].steam_name .. \" повышает температуру на 2 градуса\", {1, 0.5, 0})\r\n\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[color]).setVar(\"RT\", getObjectFromGUID(Global.getVar(\"PLData\").resLists[color]).getVar(\"RT\") + 1)\r\n\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[color]).call(\"RTupd\")\r\n\t\t\t\r\n\t\t\tif index == 17 or index == 15 then\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[color]).call(\"ProdAdd\", {name = \"Тепло\", add = 1})\r\n\t\t\t\tprintToAll(Player[color].steam_name ..\" повышает свое производство тепла на 1!\")\r\n\t\t\tend\r\n\t\telse\r\n\t\t\tprintToAll(\"Правительство повышает температуру на 2 градуса\", {0.5, 0.5, 0.5})\r\n\t\tend\r\n    else\r\n        printToAll(\"Температура не может быть выше +8\", {1, 0, 0})\r\n        index = index + 1\r\n    end\r\nend\r\nfunction heat(color)\r\n\tincreaseTemp(self, color)\r\nend\r\n\r\nfunction decreaseTemp(object, color)\r\n        index = index + 1\r\n    if index <= 20 then\r\n        tempMarker = getObjectFromGUID(\"f1bfac\")\r\n        tempMarker.setPositionSmooth(temperature[index])\r\n        printToAll(Player[color].steam_name .. \" понижает температуру на 2 градуса\", {1, 1, 0})\r\n    else\r\n        printToAll(\"Температура не может быть ниже -30\", {1,0,0})\r\n        index = index - 1\r\n    end\r\nend\r\n\r\n\r\nfunction onSave()\r\n\r\n    --Put variables to save into a table\r\n    local data_to_save = {tempIndex = index}\r\n    saved_data = JSON.encode(data_to_save)\r\n    return saved_data\r\nend\r\n",
+  "LuaScriptState": "{\"tempIndex\":20}",
+  "XmlUI": ""
+}

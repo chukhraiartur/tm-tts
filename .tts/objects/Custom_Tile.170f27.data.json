@@ -1,0 +1,57 @@
+{
+  "GUID": "170f27",
+  "Name": "Custom_Tile",
+  "Transform": {
+    "posX": 0.399556577,
+    "posY": 0.9600002,
+    "posZ": -18.6029072,
+    "rotX": 0.00000791428,
+    "rotY": 179.996567,
+    "rotZ": -1.47749915e-7,
+    "scaleX": 1,
+    "scaleY": 1,
+    "scaleZ": 1
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 1,
+    "g": 0.4981711,
+    "b": 0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "http://i.imgur.com/rPLWysh.jpg",
+    "ImageSecondaryURL": "http://i.imgur.com/whD2ML3.jpg",
+    "ImageScalar": 1,
+    "WidthScale": 0,
+    "CustomTile": {
+      "Type": 3,
+      "Thickness": 0.1,
+      "Stackable": false,
+      "Stretch": true
+    }
+  },
+  "LuaScript": "Backs = {\r\n\tproject = \"https://steamusercontent-a.akamaihd.net/ugc/99472719161571100/EA0122B9E00F0FB9069FC2C275D83C63D1D5BA3E/\",\r\n\tcorporation = \"https://steamusercontent-a.akamaihd.net/ugc/830203174353589618/94E278550FA7701ACDF2BA3BCDDF508964122104/\",\r\n\tprolog = \"https://steamusercontent-a.akamaihd.net/ugc/28804201134524710/B8335437F9AD086CC9B9522E928577D6E1344DEA/\",\r\n\tcrisis = \"https://steamusercontent-a.akamaihd.net/ugc/1636452068648244507/9E93DA1D2229D74112A016D4C54DEE598126A426/\",\r\n\tsponsorship = \"https://steamusercontent-a.akamaihd.net/ugc/28811178277742185/1E5CD93249373D9E124B2060581F43DC5BF921FF/\",\r\n\tmilestone = \"https://steamusercontent-a.akamaihd.net/ugc/28812445892062376/2A6C6D3AA5FC654AFFD6F3260AFAC83514571181/\",\r\n\taward = \"https://steamusercontent-a.akamaihd.net/ugc/28812445892062293/66A0D24C0E463AED66FBB72DBA00496B34EFC9DE/\",\r\n}\r\ndiscardPos = {\r\n\tproject = {{-21.27, 3, -10.76}, {0.00, 180.00, 180.00}},\r\n\tcorporation = {{-58.00, 2.00, 19.00}, {0.00, 180.00, 0.00}},\r\n\tprolog = {{-58.00, 2.00, 23.00}, {0.00, 180.00, 0.00}},\r\n\tsponsorship = {{-60.00, 3.00, 31.00}, {0.00, 90.00, 0.00}},\r\n\tmilestone = {{-58.0, 3.00, 31.00}, {0.00, 90.00, 0.00}},\r\n\taward = {{-56.00, 3.00, 31.00}, {0.00, 90.00, 0.00}},\r\n}\r\n\r\nfunction onload ()\r\n\tself.createButton({\r\n\t\tclick_function = 'discard',\r\n\t\tlabel = 'Discard',\r\n\t\tfunction_owner = self,\r\n\t\tposition = { 0, -0.1, 0},\r\n\t\trotation = {0, 0, 0},\r\n\t\twidth = 1200,\r\n\t\theight = 500,\r\n\t\tfont_size = 200\r\n\t})\r\nend\r\n\r\nfunction discard(_, colour)\r\n\tfor _, obj in pairs(Player[colour].getHandObjects()) do\r\n\t\tif obj.type == \"Card\" then\r\n\t\t\tfor __, data in pairs(obj.getData().CustomDeck) do\r\n\t\t\t\tfor back, url in pairs(Backs) do\r\n\t\t\t\t\tif data.BackURL == url then\r\n\t\t\t\t\t\tobj.setPosition(discardPos[back][1])\r\n\t\t\t\t\t\tobj.setRotation(discardPos[back][2])\r\n\t\t\t\t\tend\r\n\t\t\t\tend\r\n\t\t\tend\r\n\t\telseif obj.type == \"Tile\" and obj.getDescription() == \"Колония\" then\r\n\t\t\tGlobal.getVar(\"objs\").colonyBag.putObject(obj)\r\n\t\tend\r\n\tend\r\nend\r\n",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

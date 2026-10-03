@@ -1,0 +1,49 @@
+{
+  "GUID": "f83d45",
+  "Name": "ScriptingTrigger",
+  "Transform": {
+    "posX": -1.27572656,
+    "posY": 21.93,
+    "posZ": 1.6832819,
+    "rotX": 0,
+    "rotY": 0.0563007444,
+    "rotZ": 0,
+    "scaleX": 24.61416,
+    "scaleY": 1.93232751,
+    "scaleZ": 21.1484375
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.509803951
+  },
+  "Tags": [
+    "tile"
+  ],
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "function onChat(message, sender)\r\n\tif message == \"!поле\" then\r\n\t\tMapCheck()\r\n\t\treturn false\r\n\tend\r\n\t\r\n\tif message == \"!поле \" then\r\n\t\tclearText()\r\n\t\treturn false\r\n\tend\r\nend\r\n\r\n\r\nfunction MapCheck()\r\n\tclearText()\r\n\t\r\n\tPL = {0, 0, 0, 0, 0}  -- подсчет ПО\r\n\tfor _, tile in ipairs(self.getObjects(false)) do\r\n\t\thitList = Physics.cast({  -- определение маркера\r\n\t\t\torigin = tile.getPosition() + Vector(0, 1.5, 0),\r\n\t\t\tdirection = {0,-0.1,0},\r\n\t\t\tmax_distance = 1,\r\n\t\t})\r\n\t\t\r\n\t\tif #hitList > 0 then  -- определение цвета тайла\r\n\t\t\tclr = hitList[1].hit_object.getColorTint()\r\n\t\t\tPLi = nil\r\n\t\t\tif clr.b >= 0.9 then\r\n\t\t\t\tif clr.g >= 0.9 then\r\n\t\t\t\t\t--print(\"Белый!\")\r\n\t\t\t\t\tPLi = 1\r\n\t\t\t\telse\r\n\t\t\t\t\t--print(\"Синий!\")\r\n\t\t\t\t\tPLi = 5\r\n\t\t\t\tend\r\n\t\t\telseif clr.r >= 0.9 then\r\n\t\t\t\tif clr.g >= 0.9 then\r\n\t\t\t\t\t--print(\"Желтый!\")\r\n\t\t\t\t\tPLi = 3\r\n\t\t\t\telse\r\n\t\t\t\t\t--print(\"Красный!\")\r\n\t\t\t\t\tPLi = 2\r\n\t\t\t\tend\r\n\t\t\telseif clr.g >= 0.7 then\r\n\t\t\t\t--print(\"Зеленый!\")\r\n\t\t\t\tPLi = 4\r\n\t\t\tend\r\n\t\t\t\r\n\t\t\ttile.highlightOn(clr, 60)\r\n\t\t\t\r\n\t\t\tif tile.getDescription() == \"Город\" then  -- подсчет очков города\r\n\t\t\t\tforests = 0\r\n\t\t\t\tfor i = 1, 6 do\t\t\t\t\t\r\n\t\t\t\t\tfindList = Physics.cast({\r\n\t\t\t\t\t\torigin = tile.getPosition() + Vector(1.5, 0.5, 0):rotateOver('y', 60*i),\r\n\t\t\t\t\t\tdirection = {0,-0.1,0},\r\n\t\t\t\t\t\tmax_distance = 0.4,\r\n\t\t\t\t\t})\r\n\t\t\t\t\tif #findList > 0 then\r\n\t\t\t\t\t\tif findList[1].hit_object.getDescription() == \"Лес\" then\r\n\t\t\t\t\t\t\tforests = forests + 1\r\n\t\t\t\t\t\tend\r\n\t\t\t\t\tend\r\n\t\t\t\tend\r\n\t\t\t\t--print(\"Город +\" .. forests)\r\n\t\t\t\tPL[PLi] = PL[PLi] + forests\r\n\t\t\t\ttextSpawn(tile.getPosition(), forests, clr)\r\n\t\t\telseif tile.getDescription() == \"Лес\" then  -- подсчет очков леса\r\n\t\t\t\t--print(\"Лес +1\")\r\n\t\t\t\tPL[PLi] = PL[PLi] + 1\r\n\t\t\t\ttextSpawn(tile.getPosition(), \"1\", clr)\r\n\t\t\tend\r\n\t\tend\r\n\tend\r\n\r\n\r\n\r\n\tPLm = {0, 0, 0, 0, 0}  -- подсчет маркеров\r\n\tfor _, tile in ipairs(self.getObjects(true)) do\r\n\t\tif tile.getScale()[2] >= 0.29 and tile.getScale()[2] <= 0.36 then\r\n\t\t\t--Player[\"White\"].pingTable(tile.getPosition())\r\n\t\t\t\r\n\t\t\tclr = tile.getColorTint()\r\n\t\t\tPLi = nil\r\n\t\t\tif clr.b >= 0.9 then\r\n\t\t\t\tif clr.g >= 0.9 then\r\n\t\t\t\t\t--print(\"Белый!\")\r\n\t\t\t\t\tPLi = 1\r\n\t\t\t\telse\r\n\t\t\t\t\t--print(\"Синий!\")\r\n\t\t\t\t\tPLi = 5\r\n\t\t\t\tend\r\n\t\t\telseif clr.r >= 0.9 then\r\n\t\t\t\tif clr.g >= 0.9 then\r\n\t\t\t\t\t--print(\"Желтый!\")\r\n\t\t\t\t\tPLi = 3\r\n\t\t\t\telse\r\n\t\t\t\t\t--print(\"Красный!\")\r\n\t\t\t\t\tPLi = 2\r\n\t\t\t\tend\r\n\t\t\telseif clr.g >= 0.7 then\r\n\t\t\t\t--print(\"Зеленый!\")\r\n\t\t\t\tPLi = 4\r\n\t\t\tend\r\n\t\t\t\r\n\t\t\tPLm[PLi] = PLm[PLi] + 1\r\n\t\tend\r\n\tend\r\n\t\r\n\tprint(\"\")\r\n\tbroadcastToAll(\"Подсчет поля  (ПО, маркеры)\")\r\n\tif PL[1] > 0 or PLm[1] > 0 then\r\n\t\tbroadcastToAll(\"Белый  -  \" .. PL[1] ..\",  \".. PLm[1], {1, 1, 1})\r\n\tend\r\n\tif PL[2] > 0 or PLm[2] > 0 then\r\n\t\tbroadcastToAll(\"Красный  -  \" .. PL[2] ..\",  \".. PLm[2], {1, 0.5, 0.5})\r\n\tend\r\n\tif PL[3] > 0 or PLm[3] > 0 then\r\n\t\tbroadcastToAll(\"Желтый  -  \" .. PL[3] ..\",  \".. PLm[3], {1, 1, 0.5})\r\n\tend\r\n\tif PL[4] > 0 or PLm[4] > 0 then\r\n\t\tbroadcastToAll(\"Зеленый  -  \" .. PL[4] ..\",  \".. PLm[4], {0.5, 1, 0.5})\r\n\tend\r\n\tif PL[5] > 0 or PLm[5] > 0 then\r\n\t\tbroadcastToAll(\"Синий  -  \" .. PL[5] ..\",  \".. PLm[5], {0.5, 0.5, 1})\r\n\tend\r\nend\r\n\r\n\r\nfunction textSpawn(pos, text, color)\r\n\tspawnObjectJSON({\r\n\t\tjson = [[{\r\n\t\t\t\"Name\": \"3DText\",\r\n\t\t\t\"Transform\": {\r\n\t\t\t\t\"posX\": ]].. pos[1] ..[[,\r\n\t\t\t\t\"posY\": ]].. pos[2] + 1.5 ..[[,\r\n\t\t\t\t\"posZ\": ]].. pos[3] + 0.5 ..[[,\r\n\t\t\t\t\"rotX\": 90,\r\n\t\t\t\t\"rotY\": 0,\r\n\t\t\t\t\"rotZ\": 0,\r\n\t\t\t},\r\n\t\t\t\"Locked\": true,\r\n\t\t\t\"Text\": {\r\n\t\t\t\t\"Text\": \"]].. tostring(text) ..[[\",\r\n\t\t\t\t\"colorstate\": {\r\n\t\t\t\t\t\"r\": ]].. color.r ..[[,\r\n\t\t\t\t\t\"g\": ]].. color.g ..[[,\r\n\t\t\t\t\t\"b\": ]].. color.b ..[[\r\n\t\t\t\t},\r\n\t\t\t\t\"fontSize\": 100\r\n\t\t\t},\r\n\t\t\t\"Tags\": [\r\n\t\t\t\t\"ScoreText\"\r\n\t\t\t]\r\n\t\t}]]\r\n\t})\r\nend\r\n\r\nfunction clearText()\r\n\tfor _, obj in ipairs(getObjects(true)) do\r\n\t\tif obj.type == \"3D Text\" then\r\n\t\t\tlog(obj.getTags())\r\n\t\t\tif obj.hasTag(\"ScoreText\") then\r\n\t\t\t\tdestroyObject(obj)\r\n\t\t\tend\r\n\t\tend\r\n\tend\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

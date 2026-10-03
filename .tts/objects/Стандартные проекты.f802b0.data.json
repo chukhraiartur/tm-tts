@@ -1,0 +1,45 @@
+{
+  "GUID": "f802b0",
+  "Name": "BlockSquare",
+  "Transform": {
+    "posX": -13.25303,
+    "posY": 0.3,
+    "posZ": -0.9240342,
+    "rotX": -8.537736e-7,
+    "rotY": 180,
+    "rotZ": 6.12894837e-7,
+    "scaleX": 1,
+    "scaleY": 1,
+    "scaleZ": 1
+  },
+  "Nickname": "Стандартные проекты",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 0.9264706,
+    "g": 0,
+    "b": 0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "buttons = {\r\n\t{\"Продажа патентов\\n\\nПродать карты проектов в малой руке по 1 M€ за каждую\", \"sellCard\"},\r\n\t{\"Электростанция   (11 M€)\\n\\nПовысить производство энергии\", \"power\"},\r\n\t{\"Астероид   (14 M€)\\n\\nПовысить температуру\", \"asteroid\"},\r\n\t{\"Водоносный пласт   (18 M€)\\n\\nВыложить океан\", \"ocean\"},\r\n\t{\"Озеленение   (23 M€)\\n\\nВыложить озеленение\", \"plant\"},\r\n\t{\"Город   (25 M€)\\n\\nВыложить город\", \"city\"}\r\n}\r\n\r\nfunction onLoad()\r\n\tself.clearButtons()\r\n\t\r\n\tfor i, data in ipairs(buttons) do\r\n\t\taddButton(i, data[1], data[2])\r\n\tend\r\nend\r\nfunction addButton(i, tooltip, func)\r\n\tself.createButton({\r\n\t\tclick_function = func,\r\n\t\tfunction_owner = self,\r\n\t\tposition = {0, 0.5, i*1.15},\r\n\t\tscale = {4, 1, 4},\r\n\t\twidth = 600,\r\n\t\theight = 100,\r\n\t\tcolor = {0, 0, 0, 0.8},\r\n\t\ttooltip = tooltip,\r\n\t})\r\nend\r\n\r\nfunction sellCard(obj, player_color)\r\n\tfor _, obj in pairs(Player[player_color].getHandObjects()) do\r\n\t\tif obj.type == \"Card\" then\r\n\t\t\tfor __, data in pairs(obj.getData().CustomDeck) do\r\n\t\t\t\tif data.BackURL == \"https://steamusercontent-a.akamaihd.net/ugc/99472719161571100/EA0122B9E00F0FB9069FC2C275D83C63D1D5BA3E/\" then\r\n\t\t\t\t\tobj.setPosition({-21.27, 3, -10.76})\r\n\t\t\t\t\tobj.setRotation({0.00, 180.00, 180.00})\r\n\t\t\t\tend\r\n\t\t\tend\r\n\t\tend\r\n\tend\r\n\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ResNamesAdd\", {name = \"Мега Кредиты\", add = #Player[player_color].getHandObjects()})\r\nend\r\nfunction power(obj, player_color)\r\n\tif getObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"Get\")[\"Мега Кредиты\"].c >= 11 then\r\n\t\tPlayer[player_color].showConfirmDialog(\"Повысить производство энергии за 11 M€?\",\r\n\t\t\tfunction (player_color)\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ResNamesAdd\", {name = \"Мега Кредиты\", add = -11})\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ProdAdd\", {name = \"Энергия\", add = 1})\r\n\t\t\t\tprintToAll(player_color ..\" строит электростанцию!\")\r\n\t\t\tend\r\n\t\t)\r\n\tend\r\nend\r\nfunction asteroid(obj, player_color)\r\n\tif getObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"Get\")[\"Мега Кредиты\"].c >= 14 then\r\n\t\tPlayer[player_color].showConfirmDialog(\"Повысить температуру за 14 M€?\",\r\n\t\t\tfunction (player_color)\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ResNamesAdd\", {name = \"Мега Кредиты\", add = -14})\r\n\t\t\t\tgetObjectFromGUID(\"c9adc5\").call(\"heat\", player_color)\r\n\t\t\tend\r\n\t\t)\r\n\tend\r\nend\r\nfunction ocean(obj, player_color)\r\n\tif getObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"Get\")[\"Мега Кредиты\"].c >= 18 then\r\n\t\tPlayer[player_color].showConfirmDialog(\"Выложить океан за 18 M€?\",\r\n\t\t\tfunction (player_color)\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ResNamesAdd\", {name = \"Мега Кредиты\", add = -18})\r\n\t\t\t\tgetObjectFromGUID(\"d6af9e\").takeObject({position = {-13.00, 2.00, -5.50}})\r\n\t\t\t\tbroadcastToAll(player_color ..\" выкладывает океан!\")\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).setVar(\"RT\", getObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).getVar(\"RT\") + 1)\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"RTupd\")\r\n\t\t\tend\r\n\t\t)\r\n\tend\r\nend\r\nfunction plant(obj, player_color)\r\n\tif getObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"Get\")[\"Мега Кредиты\"].c >= 23 then\r\n\t\tPlayer[player_color].showConfirmDialog(\"Выложить озеленение за 23 M€?\",\r\n\t\t\tfunction (player_color)\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ResNamesAdd\", {name = \"Мега Кредиты\", add = -23})\r\n\t\t\t\tgetObjectFromGUID(\"e4c505\").takeObject({position = {-13.00, 2.00, -6.50}, rotation={0, 270, 0}})\r\n\t\t\t\tbroadcastToAll(player_color ..\" выкладывает озеленение!\")\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").colorMarkerBag[player_color]).takeObject({position={-13.00, 2.00, -6.50}, rotation={0, 270, 0}})\r\n\t\t\t\tgetObjectFromGUID(\"4fdd36\").call(\"breath\", player_color)\r\n\t\t\tend\r\n\t\t)\r\n\tend\r\nend\r\nfunction city(obj, player_color)\r\n\tif getObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"Get\")[\"Мега Кредиты\"].c >= 25 then\r\n\t\tPlayer[player_color].showConfirmDialog(\"Выложить город за 25 M€?\",\r\n\t\t\tfunction (player_color)\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ResNamesAdd\", {name = \"Мега Кредиты\", add = -25})\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[player_color]).call(\"ProdAdd\", {name = \"Мега Кредиты\", add = 1})\r\n\t\t\t\tgetObjectFromGUID(\"f38446\").takeObject({position = {-13.00, 2.00, -7.50}, rotation={0, 270, 0}})\r\n\t\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").cityMarkerBag[player_color]).takeObject({position={-13.00, 2.20, -7.50}, rotation={0, 270, 0}})\r\n\t\t\t\tbroadcastToAll(player_color ..\" выкладывает город!\")\r\n\t\t\tend\r\n\t\t)\r\n\tend\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

@@ -1,0 +1,55 @@
+{
+  "GUID": "a63f90",
+  "Name": "Custom_Model",
+  "Transform": {
+    "posX": -16.94004,
+    "posY": 1.4301337,
+    "posZ": -13.8995523,
+    "rotX": -3.48730225e-7,
+    "rotY": 359.969757,
+    "rotZ": -4.31070069e-10,
+    "scaleX": 0.5250004,
+    "scaleY": 0.5250004,
+    "scaleZ": 0.5250004
+  },
+  "Nickname": "Маркер Поколений",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 0.2364322,
+    "g": 0.2364322,
+    "b": 0.2364322
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomMesh": {
+    "MeshURL": "http://pastebin.com/raw/83Xzh3HY",
+    "DiffuseURL": "",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 2,
+    "TypeIndex": 0,
+    "CastShadows": true
+  },
+  "LuaScript": "function onPickUp(player_color)\r\n\tif player_color != \"Black\" then\r\n\t\tbroadcastToColor(\"Это чужой маркер!\", player_color, {2,0,0})\r\n\t\tself.setDescription(Global.getVar(\"generation\"))\r\n\tend\r\nend\r\n\r\nPos1 = {-16.94, 7, -13.90}\r\nPos2 = {-16.94, 7, 15.11}\r\nPos3 = {17.46, 7, 15.08}\r\nPos4 = {17.41, 7, -13.92}\r\n\r\nfunction onUpdate()\r\n\tif tonumber(self.getDescription()) then\r\n\t\tnum = tonumber(self.getDescription())%100\r\n\t\tnum2 = num%25/25\r\n\t\tself.setDescription(\"\")\r\n\t\t\r\n\t\tif num >= 0 and num < 25 then\r\n\t\t\tpos = lerp(Pos1, Pos2, num2)\r\n\t\telseif num >= 25 and num < 50 then\r\n\t\t\tpos = lerp(Pos2, Pos3, num2)\r\n\t\telseif num >= 50 and num < 75 then\r\n\t\t\tpos = lerp(Pos3, Pos4, num2)\r\n\t\telseif num >= 75 and num < 100 then\r\n\t\t\tpos = lerp(Pos4, Pos1, num2)\r\n\t\tend\r\n\t\t\r\n\t\thitList = Physics.cast({\r\n\t\t\torigin = pos,\r\n\t\t\tdirection = {0, -1, 0},\r\n\t\t\tmax_distance = 7,\r\n\t\t})\r\n\t\t\r\n\t\tself.setPositionSmooth(hitList[1].point + Vector(0, 0.5, 0))\r\n\t\tself.setRotationSmooth({0, 0, 0})\r\n\tend\r\nend\r\n\r\nfunction lerp(a, b, t)\r\n\tout = {}\r\n\tfor i = 1, 3 do\r\n\t\tout[i] = a[i] + (b[i]-a[i]) * t\r\n\tend\r\n\treturn out\r\nend\r\n\r\n",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

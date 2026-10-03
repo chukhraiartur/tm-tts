@@ -1,0 +1,57 @@
+{
+  "GUID": "4fdd36",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": 9.578814,
+    "posY": 0.796109557,
+    "posZ": 7.76685572,
+    "rotX": 0.00000531870637,
+    "rotY": 180.026688,
+    "rotZ": 0.0000069005655,
+    "scaleX": 0.7003235,
+    "scaleY": 1,
+    "scaleZ": 0.7003235
+  },
+  "Nickname": "Oxygen",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "http://i.imgur.com/2MOGxEI.png",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1,
+    "WidthScale": 0,
+    "CustomToken": {
+      "Thickness": 0.2,
+      "MergeDistancePixels": 15,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "oxygen = {\r\n    {8.40, 1.54, 9.12},\r\n    {7.38, 1.54, 9.94},\r\n    {6.28, 1.54, 10.64},\r\n    {5.08, 1.54, 11.23},\r\n    {3.94, 1.54, 11.68},\r\n    {2.67, 1.54, 12.00},\r\n    {1.43, 1.54, 12.21},\r\n    {0.20, 1.54, 12.23},\r\n    {-1.05, 1.54, 12.18},\r\n    {-2.31, 1.54, 11.97},\r\n    {-3.51, 1.54, 11.69},\r\n    {-4.70, 1.54, 11.20},\r\n    {-5.84, 1.54, 10.59},\r\n    {-6.96, 1.54, 9.84},\r\n    {-8.03, 1.54, 9.02},\r\n}\r\n\r\n\r\nfunction onLoad(saved_data)\r\n\tif saved_data ~= \"\" and saved_data ~= nil then\r\n    \t\t\tlocal loaded_data = JSON.decode(saved_data)\r\n    index = loaded_data.oxygenIndex\r\n\telse\r\n    index = #oxygen\r\nend\r\n\r\nself.createButton({\r\n         click_function = 'increaseO2',\r\n         label = '+',\r\n         function_owner = self,\r\n         position = { 0, 0.2, 0.9},\r\n         rotation = {0, 0, 0},\r\n         width = 1000,\r\n         height = 500,\r\n         font_size = 450,\r\n         color = {1, 0, 0}\r\n    })\r\nself.createButton({\r\n        click_function = 'decrease02',\r\n        label = '-',\r\n        function_owner = self,\r\n        position = { 0, 0.2, 2.1},\r\n        rotation = {0, 0, 0},\r\n        width = 500,\r\n        height = 500,\r\n        font_size = 450,\r\n        color = {0.52941176470588, 0.8078431372549, 0.92156862745098}\r\n    })\r\nend\r\n\r\n\r\nfunction increaseO2(object, color)\r\n    index = index - 1\r\n    if index > 0 then\r\n        marker = getObjectFromGUID(\"ca3d95\")\r\n\t\tmarker.setPositionSmooth(oxygen[index])\r\n\t\t\r\n\t\tif color then\r\n\t\t\tprintToAll(Player[color].steam_name .. \" увеличивает уровень кислорода на 1%\",{0, 1, 0})\r\n\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[color]).setVar(\"RT\", getObjectFromGUID(Global.getVar(\"PLData\").resLists[color]).getVar(\"RT\") + 1)\r\n\t\t\tgetObjectFromGUID(Global.getVar(\"PLData\").resLists[color]).call(\"RTupd\")\r\n\t\t\t\r\n\t\t\tif index == 7 then\r\n\t\t\t\tgetObjectFromGUID(\"c9adc5\").call(\"heat\", color)\r\n\t\t\tend\r\n\t\telse\r\n\t\t\tprintToAll(\"Правительство увеличивает уровень кислорода на 1%\",{0.5, 0.5, 0.5})\r\n\t\tend\r\n    else\r\n        printToAll(\"Уровень кислорода не может быть выше 14%\",{1,0,0})\r\n        index = index + 1\r\n    end\r\nend\r\n\r\nfunction breath(color)\r\n\tincreaseO2(self, color)\r\nend\r\n\r\nfunction decrease02(object, color)\r\n        index = index + 1\r\n    if index <= 15 then\r\n         marker = getObjectFromGUID(\"ca3d95\")\r\n         marker .setPositionSmooth(oxygen[index])\r\n        printToAll(Player[color].steam_name .. \" уменьшает уровень кислорода на 1%\", {1, 1, 0})\r\n    else\r\n        printToAll(\"Уровень кислорода не может быть ниже 0%\", {1,0,0})\r\n        index = index - 1\r\n    end\r\nend\r\n\r\n\r\n\r\n\r\nfunction onSave()\r\n\r\n    --Put variables to save into a table\r\n    local data_to_save = {oxygenIndex = index}\r\n    saved_data = JSON.encode(data_to_save)\r\n    return saved_data\r\nend\r\n",
+  "LuaScriptState": "{\"oxygenIndex\":15}",
+  "XmlUI": ""
+}
