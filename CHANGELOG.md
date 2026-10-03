@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Venus standard project** «Очистка воздуха» (15 M€). The Venus board now has a button on its standard project, like
+  the standard projects on the Mars board: after confirmation it takes 15 M€, raises Venus by one step (2%) and gives
+  the player 1 TR. It is disabled at 30%. The button is created from the «Стандартные проекты» script (`f802b0`)
+  when the Venus board is taken out of its bag during setup, or on load if a Venus game is already running.
+
 ## 2026-10-03
 
 ### Fixed

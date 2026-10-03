@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Added:** the Venus standard project «Очистка воздуха» (15 M€) is now a button: it pays 15 M€, raises Venus by one
+  step and gives 1 TR, like the standard projects on the Mars board.
 - **Fixed:** the «Всего городов» (total cities) counter now counts every city tile on the table: Mars, Ganymede Colony,
   Phobos Space Haven, the Venus board and the Capital tile.
 - **Added:** a «Городов на поверхности Марса» (cities on the Mars surface) counter for cards that only count cities on Mars.
@@ -73,6 +75,7 @@ Shipped in the base game box as a variant.
 
 - Venus board, 49 projects, 5 corporations, the «Авиатор» milestone and the «Венерианец» award.
 - City spaces on Venus count towards the total city counter.
+- The «Очистка воздуха» standard project (15 M€) is a button with confirmation: pays, raises Venus, gives TR.
 - Option: Venus must be fully terraformed for the game to end.
 
 ### Prelude — «Пролог» (2018)
@@ -180,6 +183,8 @@ Notes:
 - **Check the Mars-surface counter on Tharsis.** The Mars disc centre and radius were calibrated on the Hellas/Elysium
   board. Tharsis is a separate object and may need slightly different values.
 - **Tharsis Republic house rule.** Test a small nerf of the corporation, changing one parameter at a time.
+- **Venus track bonuses.** Raising Venus to 8% should give a card and to 16% an extra TR. Neither the `+` button on
+  the Venus board nor the standard project handles these bonuses yet (the thermometer already handles its heat bonuses).
 - **Undo support for the city counters.** After `Ctrl+Z` the counters update only on the next action with a city tile.
 - **Original author's TODO list** (from the header of `Global.lua`): automatic colony trading, automatic placement of
   neutral delegates, delegate handling as in the rules, moving global parameter counters into the Global script,
