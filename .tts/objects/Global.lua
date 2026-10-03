@@ -555,7 +555,7 @@ function setUI()  -- создание интерфейса
 			textColor="#FF4040"
 			colors="#000000B0|#202020C0|#303030D0|#00000060"
 			>
-		Не готов передать карты
+		Готов передать карты
 	</Button>]]
 	end
 	draftXML = draftXML ..[[
@@ -1259,13 +1259,12 @@ function resetDraftReady()  -- все кнопки драфта в "не гот�
 		updateDraftButton(color)
 	end
 end
-function updateDraftButton(color)  -- текст и цвет кнопки драфта игрока
+function updateDraftButton(color)  -- текст кнопки драфта постоянный, готовность видна по цвету
 	local arrow = draftClockwise and "←  по часовой" or "против часовой  →"
+	Global.UI.setValue("Draft".. color, "Готов передать карты\n".. arrow)
 	if draftReady[color] then
-		Global.UI.setValue("Draft".. color, "Готов передать карты\n".. arrow)
 		Global.UI.setAttribute("Draft".. color, "textColor", "#40FF40")
 	else
-		Global.UI.setValue("Draft".. color, "Не готов передать карты\n".. arrow)
 		Global.UI.setAttribute("Draft".. color, "textColor", "#FF4040")
 	end
 end

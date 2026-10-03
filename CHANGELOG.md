@@ -9,8 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **Draft** (setup option «Драфт»). The old draft passed cards automatically as soon as every player had exactly the
   expected number of cards in the hidden draft zone. It gave no feedback and hung silently on any mistake. Now, during
-  the draft only, every player sees their own button on the right side of the screen: red «Не готов передать карты»,
-  green «Готов передать карты» after a click. The button also shows the direction (← clockwise in even generations,
+  the draft only, every player sees their own «Готов передать карты» button on the right side of the screen. The text is red while the
+  player is not ready and turns green after a click. The button also shows the direction (← clockwise in even generations,
   → counter-clockwise in odd ones). When all players are ready, the script checks the cards: the right number in the
   draft zone, the rest in the hand, nothing held. If something is wrong, it tells the player and resets their button.
   Otherwise the remaining cards go to the neighbour. The last card joins the hand by itself, the draft zones are removed
