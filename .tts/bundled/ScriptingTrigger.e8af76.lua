@@ -260,7 +260,7 @@ function steelCost(obj, color, alt_click)
 		if alt_click then
 			Player[color].showInputDialog("Сколько это должно стоить?", steel, function(a)
 				steel = tonumber(a)
-				self.editButton({index=3, label=steel})
+				self.editButton({index=Button.Steel, label=steel})
 			end)
 		end
 	end
@@ -270,7 +270,7 @@ function titanCost(obj, color, alt_click)
 		if alt_click then
 			Player[color].showInputDialog("Сколько это должно стоить?", titan, function(a)
 				titan = tonumber(a)
-				self.editButton({index=4, label=titan})
+				self.editButton({index=Button.Titan, label=titan})
 			end)
 		end
 	end

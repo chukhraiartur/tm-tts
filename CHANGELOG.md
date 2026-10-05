@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Steel and titanium value on player boards.** Right-clicking the steel or titanium value and entering a new price
+  (e.g. 3 instead of 2) saved the number but updated the wrong buttons. Steel overwrote the heat cost label, and
+  titanium changed an invisible button. The value on the board stayed 2/3. Both now update their own labels
+  (`Button.Steel` / `Button.Titan`) in all five player zone scripts.
+
 ### Changed
 
 - **Draft** (setup option «Драфт»). The old draft passed cards automatically as soon as every player had exactly the

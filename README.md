@@ -8,6 +8,7 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Fixed:** changing the steel or titanium value on a player board (right-click) now updates the shown number.
 - **Changed:** the draft now has a per-player «ready to pass cards» button (red/green, with the passing direction).
   Cards are passed when everyone is ready, and mistakes are reported in chat instead of hanging the game.
 - **Added:** the Venus standard project «Очистка воздуха» (15 M€) is now a button: it pays 15 M€, raises Venus by one
