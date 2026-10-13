@@ -8,6 +8,7 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Added:** Venus track bonuses: a project card at 8% and an extra TR at 16% for the player who raised Venus.
 - **Fixed:** changing the steel or titanium value on a player board (right-click) now updates the shown number.
 - **Changed:** the draft now has a per-player «ready to pass cards» button (red/green, with the passing direction).
   Cards are passed when everyone is ready, and mistakes are reported in chat instead of hanging the game.
@@ -81,6 +82,8 @@ Shipped in the base game box as a variant.
 - Venus board, 49 projects, 5 corporations, the «Авиатор» milestone and the «Венерианец» award.
 - City spaces on Venus count towards the total city counter.
 - The «Очистка воздуха» standard project (15 M€) is a button with confirmation: pays, raises Venus, gives TR.
+- Venus track bonuses are automatic: a project card at 8% and an extra TR at 16% for the player who raised Venus
+  (with the `+` button or the standard project).
 - Option: Venus must be fully terraformed for the game to end.
 
 ### Prelude — «Пролог» (2018)
@@ -190,8 +193,8 @@ Notes:
 - **Check the Mars-surface counter on Tharsis.** The Mars disc centre and radius were calibrated on the Hellas/Elysium
   board. Tharsis is a separate object and may need slightly different values.
 - **Tharsis Republic house rule.** Test a small nerf of the corporation, changing one parameter at a time.
-- **Venus track bonuses.** Raising Venus to 8% should give a card and to 16% an extra TR. Neither the `+` button on
-  the Venus board nor the standard project handles these bonuses yet (the thermometer already handles its heat bonuses).
+- **Track bonuses after a decrease.** Like temperature and oxygen, a Venus bonus is given again if the marker is
+  lowered with `-` and raised past the same mark. The tracks could remember which bonuses were already given.
 - **Resume the draft after a reload.** The research phase (`STEP = 5`) is not restored in `onLoad`, so reloading the
   table in the middle of a draft loses the draft state.
 - **Undo support for the city counters.** After `Ctrl+Z` the counters update only on the next action with a city tile.

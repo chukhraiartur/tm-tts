@@ -9,6 +9,8 @@ buttons = {
 
 VENUS_BOARD = "9d6aeb"  -- поле Венеры (до начала партии лежит в мешке "Венера")
 VENUS_MARKER = "a684cb"
+VENUS_CARD_INDEX = 12  -- index шкалы Венеры для 8% (16 - 0%, 1 - 30%): игрок берет карту проекта
+VENUS_RT_INDEX = 8     -- index для 16%: игрок получает еще 1 РТ
 
 function onLoad()
 	self.clearButtons()
@@ -39,6 +41,20 @@ function addVenusButton(board)  -- кнопка стандартного про�
 		press_color = {1, 1, 1, 0.3},
 		tooltip = "Очистка воздуха   (15 M€)\n\nПовысить уровень Венеры",
 	})
+
+	-- кнопка "+" поля Венеры теперь вызывает venusPlus (с бонусами 8% / 16%)
+	Wait.condition(function()
+		for _, btn in ipairs(board.getButtons()) do
+			if btn.click_function == "increaseVenus" then
+				board.editButton({index = btn.index, click_function = "venusPlus", function_owner = self})
+			end
+		end
+	end, function()  -- ждем, пока поле создаст свои кнопки
+		for _, btn in ipairs(board.getButtons() or {}) do
+			if btn.click_function == "increaseVenus" then return true end
+		end
+		return false
+	end, 5)
 end
 function addButton(i, tooltip, func)
 	self.createButton({
@@ -136,15 +152,43 @@ function venus(obj, player_color)
 		Player[player_color].showConfirmDialog("Повысить уровень Венеры за 15 M€?",
 			function (player_color)
 				getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).call("ResNamesAdd", {name = "Мега Кредиты", add = -15})
-
-				-- то же, что кнопка "+" на поле Венеры (ее через call нельзя вызвать с цветом игрока)
-				local index = board.getVar("index") - 1
-				board.setVar("index", index)
-				getObjectFromGUID(VENUS_MARKER).setPositionSmooth(board.getPosition() + Vector(board.getTable("venus")[index]))
-				printToAll(Player[player_color].steam_name .. " увеличивает уровень терраформирования Венеры на 2%", {1, 0.5, 0})
-				getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).setVar("RT", getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).getVar("RT") + 1)
-				getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).call("RTupd")
+				raiseVenus(player_color)
 			end
 		)
 	end
+end
+function venusPlus(obj, player_color)  -- кнопка "+" на поле Венеры
+	if getObjectFromGUID(VENUS_BOARD).getVar("index") <= 1 then
+		printToAll("Уровень терраформирования Венеры не может быть выше 30%", {1, 0, 0})
+		return
+	end
+	raiseVenus(player_color)
+end
+function raiseVenus(player_color)  -- +2% Венеры от игрока: РТ и бонусы шкалы
+	-- то же, что increaseVenus поля Венеры (ее через call нельзя вызвать с цветом игрока)
+	local board = getObjectFromGUID(VENUS_BOARD)
+	local index = board.getVar("index") - 1
+	board.setVar("index", index)
+	getObjectFromGUID(VENUS_MARKER).setPositionSmooth(board.getPosition() + Vector(board.getTable("venus")[index]))
+	printToAll(Player[player_color].steam_name .. " увеличивает уровень терраформирования Венеры на 2%", {1, 0.5, 0})
+	addRT(player_color)
+
+	if index == VENUS_CARD_INDEX then  -- 8%: карта проекта
+		for _, obj in ipairs(getObjectFromGUID("1ae58d").getObjects()) do
+			if obj.type == "Deck" then
+				obj.deal(1, player_color)  -- в малую руку, как при обычном доборе
+				printToAll(Player[player_color].steam_name .." получает карту проекта за 8% Венеры!", {1, 0.5, 0})
+				return
+			end
+		end
+		broadcastToAll("Колода проектов не найдена, ".. Player[player_color].steam_name .." берет карту за 8% Венеры вручную", {1, 0, 0})
+	elseif index == VENUS_RT_INDEX then  -- 16%: дополнительный РТ
+		addRT(player_color)
+		printToAll(Player[player_color].steam_name .." получает 1 РТ за 16% Венеры!", {1, 0.5, 0})
+	end
+end
+function addRT(player_color)  -- +1 РТ игроку
+	local resList = getObjectFromGUID(Global.getVar("PLData").resLists[player_color])
+	resList.setVar("RT", resList.getVar("RT") + 1)
+	resList.call("RTupd")
 end

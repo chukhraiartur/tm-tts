@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Venus track bonuses.** When a player raises Venus to 8%, they get a project card (dealt into the small hand, like
+  any card drawn from the deck). At 16% they get one extra TR. This works for the `+` button on the Venus board
+  and for the «Очистка воздуха» standard project: both now go through one function, `raiseVenus`, in the
+  «Стандартные проекты» script (`f802b0`), which redirects the board's `+` button to itself. A Venus raise from
+  government support gives no bonus, as in the rules.
+
 ### Fixed
 
 - **Steel and titanium value on player boards.** Right-clicking the steel or titanium value and entering a new price
