@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Random board.** The «ПОЛЕ» setup option now cycles База → Эллада → Элизий → **Рандом**. With «Рандом», `mapSelect()`
+  in Global picks one of the three boards at random when the game starts and announces it in chat.
+
 - **Alternating turn order** (new setup option «ЧЕРЕДОВ. ХОДА», off by default). With the option off, turns always pass
   clockwise, as before. With it on, the action phase goes clockwise (←) in even generations and counter-clockwise (→)
   in odd ones, like the draft, so no player always depends on the same neighbour. It uses TTS's built-in

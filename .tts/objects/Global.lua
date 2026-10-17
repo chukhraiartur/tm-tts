@@ -579,6 +579,10 @@ function setLogs()  -- создание вкладок логов
 end
 function mapSelect()  -- выбор поля
 	mapTile = getObjectFromGUID("317983")
+	if configs.map == 4 then  -- "Рандом": случайное из трех полей
+		configs.map = math.random(3)
+		broadcastToAll("Случайное поле: ".. ({"База", "Эллада", "Элизий"})[configs.map])
+	end
 	if configs.map == 1 then
 		mapTile.setPosition({0.3, 0, 0.6})
 	elseif configs.map == 2 then

@@ -8,6 +8,7 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Added:** «Рандом» value for the board setup option: a random board out of Tharsis, Hellas and Elysium.
 - **Added:** setup option «ЧЕРЕДОВ. ХОДА»: turns pass clockwise in even generations and counter-clockwise in odd ones.
 - **Added:** Venus track bonuses: a project card at 8% and an extra TR at 16% for the player who raised Venus.
 - **Fixed:** changing the steel or titanium value on a player board (right-click) now updates the shown number.
@@ -131,7 +132,7 @@ All options are set on the settings tile before the game starts:
 | --- | --- |
 | Expansions | Turn each expansion above on or off |
 | Corporations / preludes to choose | How many cards each player is dealt |
-| Board | Tharsis, Hellas or Elysium |
+| Board | Tharsis, Hellas, Elysium or «Рандом» (one of the three at random, announced at game start) |
 | Government support | At the end of a generation the first player raises one global parameter without getting its bonus |
 | TR recalculation | Lower TR in the solar phase (Turmoil) |
 | Draft | Players pass cards during the research phase |

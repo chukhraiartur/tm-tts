@@ -155,8 +155,8 @@ function FprologeCount()
 	updateCheck("prologeCount", config.prologeCount)
 end
 function Fmap()
-	config.map = config.map % 3 +1
-	name = {"База", "Эллада", "Элизий"}
+	config.map = config.map % 4 +1
+	name = {"База", "Эллада", "Элизий", "Рандом"}  -- 4 - случайное поле, выбирается в Global при старте
 	updateCheck("map", name[config.map])
 end
 function Fsupport()
