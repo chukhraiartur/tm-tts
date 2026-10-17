@@ -539,19 +539,34 @@ function setUI()  -- создание интерфейса
 			✘
 		</Text>]]
 	end
-	-- панель драфта: у каждого игрока своя кнопка, видимая только ему
+	-- панель драфта: общая строка с направлением + у каждого игрока своя кнопка, видимая только ему
 	local draftXML = [[
 <Panel
 		id="DraftPanel"
 		width="300"
-		height="100"
+		height="130"
 		active="false"
 		allowDragging="true"
 		rectAlignment="MiddleRight"
 		returnToOriginalPositionWhenReleased="false"
-		offsetXY="0 135"
+		offsetXY="0 150"
 		color="#00000000"
-		>]]
+		>
+	<Text
+			id="DraftDirection"
+			height="35"
+			rectAlignment="UpperCenter"
+			fontSize="24"
+			fontStyle="Bold"
+			color="#FFFFFF"
+			outline="#000000"
+			>
+	</Text>
+	<Panel
+			height="95"
+			rectAlignment="LowerCenter"
+			color="#00000000"
+			>]]
 	for _, clr in ipairs(Global.getVar("playersTurns")) do
 		draftXML = draftXML ..[[
 	<Button
@@ -567,6 +582,7 @@ function setUI()  -- создание интерфейса
 	</Button>]]
 	end
 	draftXML = draftXML ..[[
+	</Panel>
 </Panel>]]
 
 	Global.UI.setXml(UI[1] .. XML .. UI[2] .. draftXML)
@@ -1263,6 +1279,10 @@ function startDraft()  -- драфт: первый круг
 	end
 	resetDraftReady()
 	Global.UI.show("DraftPanel")
+	-- направление - отдельный общий текст: setValue на кнопке с visibility у хоста не обновляется
+	Wait.time(function()
+		Global.UI.setValue("DraftDirection", draftClockwise and "←  по часовой" or "против часовой  →")
+	end, 0.3)
 end
 function resetDraftReady()  -- все кнопки драфта в "не готов"
 	draftReady = {}
@@ -1272,8 +1292,6 @@ function resetDraftReady()  -- все кнопки драфта в "не гот�
 	end
 end
 function updateDraftButton(color)  -- текст кнопки драфта постоянный, готовность видна по цвету
-	local arrow = draftClockwise and "←  по часовой" or "против часовой  →"
-	Global.UI.setValue("Draft".. color, "Готов передать карты\n".. arrow)
 	if draftReady[color] then
 		Global.UI.setAttribute("Draft".. color, "textColor", "#40FF40")
 	else

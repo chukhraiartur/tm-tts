@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Fixed:** the draft direction (← / →) is now a separate line above the draft button, visible to every player
+  including the host.
 - **Added:** «Рандом» value for the board setup option: a random board out of Tharsis, Hellas and Elysium.
 - **Added:** setup option «ЧЕРЕДОВ. ХОДА»: turns pass clockwise in even generations and counter-clockwise in odd ones.
 - **Added:** Venus track bonuses: a project card at 8% and an extra TR at 16% for the player who raised Venus.

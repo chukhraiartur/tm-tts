@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **Random board.** The «ПОЛЕ» setup option now cycles База → Эллада → Элизий → **Рандом**. With «Рандом», `mapSelect()`
   in Global picks one of the three boards at random when the game starts and announces it in chat.
-
 - **Alternating turn order** (new setup option «ЧЕРЕДОВ. ХОДА», off by default). With the option off, turns always pass
   clockwise, as before. With it on, the action phase goes clockwise (←) in even generations and counter-clockwise (→)
   in odd ones, like the draft, so no player always depends on the same neighbour. It uses TTS's built-in
@@ -21,13 +20,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   and for the «Очистка воздуха» standard project: both now go through one function, `raiseVenus`, in the
   «Стандартные проекты» script (`f802b0`), which redirects the board's `+` button to itself. A Venus raise from
   government support gives no bonus, as in the rules.
-
-### Fixed
-
-- **Steel and titanium value on player boards.** Right-clicking the steel or titanium value and entering a new price
-  (e.g. 3 instead of 2) saved the number but updated the wrong buttons. Steel overwrote the heat cost label, and
-  titanium changed an invisible button. The value on the board stayed 2/3. Both now update their own labels
-  (`Button.Steel` / `Button.Titan`) in all five player zone scripts.
+- **Venus standard project** «Очистка воздуха» (15 M€). The Venus board now has a button on its standard project, like
+  the standard projects on the Mars board: after confirmation it takes 15 M€, raises Venus by one step (2%) and gives
+  the player 1 TR. It is disabled at 30%. The button is created from the «Стандартные проекты» script (`f802b0`)
+  when the Venus board is taken out of its bag during setup, or on load if a Venus game is already running.
 
 ### Changed
 
@@ -41,12 +37,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   and the buying phase starts. The chat shows who is ready (`N/M`) and the current round. The on-screen tip now says
   where to put the card (the zone *below* the hand, not above).
 
-### Added
+### Fixed
 
-- **Venus standard project** «Очистка воздуха» (15 M€). The Venus board now has a button on its standard project, like
-  the standard projects on the Mars board: after confirmation it takes 15 M€, raises Venus by one step (2%) and gives
-  the player 1 TR. It is disabled at 30%. The button is created from the «Стандартные проекты» script (`f802b0`)
-  when the Venus board is taken out of its bag during setup, or on load if a Venus game is already running.
+- **Draft direction not shown for the host.** The direction arrow was part of each player's button text, changed with
+  `UI.setValue`. On these per-player buttons (`visibility="<colour>"`) the change reached other players but not the
+  host, who kept the plain «Готов передать карты». The button text is now constant, and the direction
+  (`←  по часовой` / `против часовой  →`) is a separate line above the buttons. It is shared by all players and has no
+  visibility restriction.
+- **Steel and titanium value on player boards.** Right-clicking the steel or titanium value and entering a new price
+  (e.g. 3 instead of 2) saved the number but updated the wrong buttons. Steel overwrote the heat cost label, and
+  titanium changed an invisible button. The value on the board stayed 2/3. Both now update their own labels
+  (`Button.Steel` / `Button.Titan`) in all five player zone scripts.
 
 ## 2026-10-03
 
