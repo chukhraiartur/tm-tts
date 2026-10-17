@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Alternating turn order** (new setup option «ЧЕРЕДОВ. ХОДА», off by default). With the option off, turns always pass
+  clockwise, as before. With it on, the action phase goes clockwise (←) in even generations and counter-clockwise (→)
+  in odd ones, like the draft, so no player always depends on the same neighbour. It uses TTS's built-in
+  `Turns.reverse_order`, set at the start of each action phase. The direction is announced in chat. The option label and
+  checkbox are drawn on a new settings tile image in the same style as the other options
+  ([assets/settings-tile.png](assets/settings-tile.png), uploaded to Steam Cloud and set on tile `86fef0` in the save).
 - **Venus track bonuses.** When a player raises Venus to 8%, they get a project card (dealt into the small hand, like
   any card drawn from the deck). At 16% they get one extra TR. This works for the `+` button on the Venus board
   and for the «Очистка воздуха» standard project: both now go through one function, `raiseVenus`, in the

@@ -8,6 +8,7 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Added:** setup option «ЧЕРЕДОВ. ХОДА»: turns pass clockwise in even generations and counter-clockwise in odd ones.
 - **Added:** Venus track bonuses: a project card at 8% and an extra TR at 16% for the player who raised Venus.
 - **Fixed:** changing the steel or titanium value on a player board (right-click) now updates the shown number.
 - **Changed:** the draft now has a per-player «ready to pass cards» button (red/green, with the passing direction).
@@ -137,6 +138,7 @@ All options are set on the settings tile before the game starts:
 | Mandatory Venus | The game ends only after Venus is fully terraformed |
 | Random milestones & awards | Replaces the board's milestones and awards with 5 (6 with Venus) random ones out of 62 |
 | Custom start | Players get 2–4 milestone, award, colony and sponsor tokens and choose which ones go on the table |
+| Alternating turns («ЧЕРЕДОВ. ХОДА») | Off: turns always pass clockwise. On: clockwise in even generations, counter-clockwise in odd ones |
 
 ## Development
 

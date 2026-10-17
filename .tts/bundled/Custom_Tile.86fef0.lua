@@ -36,7 +36,9 @@ buttonsData = {
 	position = {0.4, 0.3, -0.025}, click_function = "FrandomMA"},
 	{tooltip = "Настраиваемый старт:\nВ начале игры игроки получают несколько жетонов достижений, наград, колоний и спонсоров, они могут выбрать какие из них будут выложены на стол, остальные будут убраны.\n0 - выключено\n2-4 - количество выдаваемых жетонов каждого типа",
 	position = {0.4, 0.3, 0.083}, click_function = "FcontrolStart"},
-	
+	{tooltip = "Чередование хода:\nВ четных поколениях ход передается по часовой стрелке, в нечетных - против часовой (как в драфте)\nВыключено - всегда по часовой",
+	position = {0.4, 0.3, 0.191}, click_function = "FaltTurns"},
+
 	{tooltip = "Закончить подготовку и начать игру!",
 	position = {0, 0.3, 0.9}, scale = {0.4, 1, 0.4}, click_function = "finishSetup"},
 }
@@ -60,6 +62,7 @@ checksData = {
 	{tooltip = "reqVenus",		position = {0.9, 0.2, -0.133}},
 	{tooltip = "randomMA",			position = {0.9, 0.2, -0.025}},
 	{tooltip = "controlStart",	position = {0.9, 0.2, 0.083}},
+	{tooltip = "altTurns",		position = {0.9, 0.2, 0.191}},
 }
 
 config = {
@@ -82,6 +85,7 @@ config = {
 	reqVenus = false,
 	randomMA = false,
 	controlStart = 0,
+	altTurns = false,
 }
 
 
@@ -181,6 +185,10 @@ function FcontrolStart()
 		config.controlStart = 2
 	end
 	updateCheck("controlStart", config.controlStart)
+end
+function FaltTurns()
+	config.altTurns = not config.altTurns
+	updateCheck("altTurns")
 end
 
 function finishSetup()
