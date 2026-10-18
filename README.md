@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Fixed:** the automation no longer breaks when a player disconnects (generation start, card dealing, government
+  support, loading a save). A disconnected player keeps their place and cards and can rejoin.
 - **Fixed:** player cubes and city figures no longer fall under greenery and city tiles placed by the automation.
 - **Fixed:** the draft direction (← / →) is now a separate line above the draft button, visible to every player
   including the host.
@@ -201,6 +203,9 @@ Notes:
 - **Tharsis Republic house rule.** Test a small nerf of the corporation, changing one parameter at a time.
 - **Track bonuses after a decrease.** Like temperature and oxygen, a Venus bonus is given again if the marker is
   lowered with `-` and raised past the same mark. The tracks could remember which bonuses were already given.
+- **Ready rockets of a disconnected player.** The phases (buying, actions) still wait for every player's rocket. A
+  disconnected player has to come back, or someone has to switch their rocket by hand. A host button such as «mark
+  absent players ready» could help.
 - **Resume the draft after a reload.** The research phase (`STEP = 5`) is not restored in `onLoad`, so reloading the
   table in the middle of a draft loses the draft state.
 - **Undo support for the city counters.** After `Ctrl+Z` the counters update only on the next action with a city tile.

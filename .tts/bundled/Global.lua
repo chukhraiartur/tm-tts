@@ -419,10 +419,11 @@ end
 
 function setPlayerTurns()  -- запоминание сидящих игроков
 	local cube = {White = "Белый", Red = "[FF0200]Красный", Yellow = "[FFFC00]Желтый", Green = "[09D900]Зеленый", Blue = "[0076FF]Синий"}
-	
-	playersTurns = {}
+
+	local restored = playersTurns ~= nil and #playersTurns > 0  -- загрузка сохранения: игроки уже известны
+	if not restored then playersTurns = {} end
 	for clr, nm in pairs(cube) do
-		if Player[clr].seated then
+		if Player[clr].seated and not restored then  -- отключившийся игрок не выпадает из партии при загрузке
 			table.insert(playersTurns, clr)
 			Wait.time(function()
 				takeName("bfa029", {name = cube[clr]})
@@ -1309,6 +1310,13 @@ function toggleDraftReady(player)  -- нажатие кнопки драфта
 			if draftReady[color] then ready = ready + 1 end
 		end
 		printToAll(player.color .." готов передать карты (".. ready .."/".. #playersTurns ..")")
+		local waiting = {}  -- кого ждем (отключившийся игрок нажмет кнопку, когда вернется)
+		for _, color in ipairs(playersTurns) do
+			if not draftReady[color] then
+				table.insert(waiting, Player[color].seated and color or color .." (не за столом)")
+			end
+		end
+		if #waiting > 0 then printToAll("Драфт: ждем ".. table.concat(waiting, ", ")) end
 		checkDraft()
 	end
 end
@@ -1386,7 +1394,9 @@ function deal4card()  -- выдача карт с добором из сброс
 		objs.projectDeck.putObject(discardDeck)
 		objs.projectDeck.shuffle()
 	end
-	objs.projectDeck.deal(4)
+	for _, color in ipairs(playersTurns) do  -- deal(4) без цвета раздает только сидящим: отключившийся остался бы без карт
+		objs.projectDeck.deal(4, color)
+	end
 end
 function nextFirstPlayer()  -- определение первого игрока
 	FirstPlayer = getObjectFromGUID("2f276a").getDescription()
@@ -1407,7 +1417,14 @@ function govermentSupport()  -- правительственная поддер�
 		if configs.venus and configs.reqVenus and getObjectFromGUID("9d6aeb").getVar("index") > 1 then table.insert(options, "Атмосфера Венеры") end
 		
 		FirstPlayer = getObjectFromGUID("2f276a").getDescription()
-		Player[FirstPlayer].showOptionsDialog("Какой показатель повысить?", options, 1,
+		local chooser = FirstPlayer  -- первый игрок отключился: выбирает любой сидящий игрок
+		if not Player[chooser].seated then
+			for _, color in ipairs(playersTurns) do
+				if Player[color].seated then chooser = color break end
+			end
+			broadcastToAll(playerName(FirstPlayer) .." не за столом, правительственную поддержку выбирает ".. playerName(chooser))
+		end
+		Player[chooser].showOptionsDialog("Какой показатель повысить?", options, 1,
 			function(text, index, player_color)
 				if text == "Уровень кислорода" then
 					getObjectFromGUID("4fdd36").call("increaseO2")
@@ -1416,7 +1433,7 @@ function govermentSupport()  -- правительственная поддер�
 				elseif text == "Количество океанов" then
 					ocean = getObjectFromGUID("d6af9e").takeObject({position = {11.50, 2.00, 9.00}})
 					Player["White"].pingTable({11.50, 1.00, 9.00})
-					broadcastToAll(Player[FirstPlayer].steam_name ..", выложи океан на поле")
+					broadcastToAll(playerName(chooser) ..", выложи океан на поле")
 				elseif text == "Атмосфера Венеры" then
 					getObjectFromGUID("9d6aeb").call("increaseVenus")
 				end
@@ -1572,7 +1589,7 @@ function moveFirstPlayerToken(newFirstPlayer)  -- объявление и пер
 	FPToken.setPositionSmooth(firstPlayerTokenSpot[newFirstPlayer])
 	FPToken.setRotationSmooth({0, firstPlayerTokenRot[newFirstPlayer], 0})
 	
-	broadcastToAll(Player[newFirstPlayer].steam_name .." теперь первый игрок")
+	broadcastToAll(playerName(newFirstPlayer) .." теперь первый игрок")
 	Turns.turn_color = newFirstPlayer
 end
 function takeDecks(array)  -- выкладывание колод дополнений
@@ -1671,6 +1688,12 @@ function hexGrid(num)
 end
 function GOG(guid)  -- getObjectFromGUID()-
 	return getObjectFromGUID(guid)
+end
+function playerName(color)  -- имя игрока; если он отключился (steam_name = nil) - его цвет
+	if Player[color] and Player[color].seated and Player[color].steam_name then
+		return Player[color].steam_name
+	end
+	return color
 end
 function isInArray(array, value)  -- поиск значения в массиве
 	local find = false

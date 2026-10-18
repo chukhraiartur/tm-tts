@@ -39,6 +39,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Automation breaking when a player disconnects.** Several places in Global assumed every player is seated:
+  - the first-player announcement used `Player[color].steam_name`, which is `nil` for a disconnected player. The Lua
+    error stopped the start of the generation: no cards dealt, no draft, no buying phase. Names now go through
+    `playerName(color)`, which falls back to the colour;
+  - `deal4card` used `deck.deal(4)`, which deals only to seated players. Each player in the game now gets 4 cards
+    explicitly (`deal(4, color)`), so a disconnected player has their cards waiting when they come back and the draft
+    count still matches;
+  - government support showed its dialog only to the first player. If they are away, the first seated player
+    chooses, and the chat says so;
+  - loading a save rebuilt the player list from whoever was seated at that moment, so a disconnected player dropped
+    out of production, turns and the draft. The saved list is now kept;
+  - the draft prints who it is waiting for and marks disconnected players «(не за столом)». They press their button
+    when they come back.
 - **Player markers falling under tiles.** For the greenery and city standard projects and for the plant-to-greenery
   conversion on player boards, the tile and the player's marker (cube or city figure) were taken out of their bags at
   the same time and almost at the same point. The marker could spawn inside the tile and get pushed under it. Now the
