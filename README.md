@@ -8,6 +8,7 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Fixed:** player cubes and city figures no longer fall under greenery and city tiles placed by the automation.
 - **Fixed:** the draft direction (← / →) is now a separate line above the draft button, visible to every player
   including the host.
 - **Added:** «Рандом» value for the board setup option: a random board out of Tharsis, Hellas and Elysium.

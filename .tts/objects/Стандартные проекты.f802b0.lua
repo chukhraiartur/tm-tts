@@ -121,13 +121,17 @@ function plant(obj, player_color)
 		Player[player_color].showConfirmDialog("Выложить озеленение за 23 M€?",
 			function (player_color)
 				getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).call("ResNamesAdd", {name = "Мега Кредиты", add = -23})
-				getObjectFromGUID("e4c505").takeObject({position = {-13.00, 2.00, -6.50}, rotation={0, 270, 0}})
+				getObjectFromGUID("e4c505").takeObject({position = {-13.00, 2.00, -6.50}, rotation={0, 270, 0}, callback_function = function(tile)
+					placeMarker(tile, Global.getVar("PLData").colorMarkerBag[player_color])
+				end})
 				broadcastToAll(player_color .." выкладывает озеленение!")
-				getObjectFromGUID(Global.getVar("PLData").colorMarkerBag[player_color]).takeObject({position={-13.00, 2.00, -6.50}, rotation={0, 270, 0}})
 				getObjectFromGUID("4fdd36").call("breath", player_color)
 			end
 		)
 	end
+end
+function placeMarker(tile, bagGUID)  -- маркер игрока сверху на тайл: берется, когда тайл уже появился, и падает на него
+	getObjectFromGUID(bagGUID).takeObject({position = tile.getPosition() + Vector(0, 1.5, 0), rotation = {0, 270, 0}})
 end
 function city(obj, player_color)
 	if getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).call("Get")["Мега Кредиты"].c >= 25 then
@@ -135,8 +139,9 @@ function city(obj, player_color)
 			function (player_color)
 				getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).call("ResNamesAdd", {name = "Мега Кредиты", add = -25})
 				getObjectFromGUID(Global.getVar("PLData").resLists[player_color]).call("ProdAdd", {name = "Мега Кредиты", add = 1})
-				getObjectFromGUID("f38446").takeObject({position = {-13.00, 2.00, -7.50}, rotation={0, 270, 0}})
-				getObjectFromGUID(Global.getVar("PLData").cityMarkerBag[player_color]).takeObject({position={-13.00, 2.20, -7.50}, rotation={0, 270, 0}})
+				getObjectFromGUID("f38446").takeObject({position = {-13.00, 2.00, -7.50}, rotation={0, 270, 0}, callback_function = function(tile)
+					placeMarker(tile, Global.getVar("PLData").cityMarkerBag[player_color])
+				end})
 				broadcastToAll(player_color .." выкладывает город!")
 			end
 		)

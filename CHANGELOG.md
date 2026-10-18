@@ -39,6 +39,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Player markers falling under tiles.** For the greenery and city standard projects and for the plant-to-greenery
+  conversion on player boards, the tile and the player's marker (cube or city figure) were taken out of their bags at
+  the same time and almost at the same point. The marker could spawn inside the tile and get pushed under it. Now the
+  marker is taken only when the tile has finished spawning (`takeObject` `callback_function`), 1.5 units above it, and
+  falls onto it.
 - **Draft direction not shown for the host.** The direction arrow was part of each player's button text, changed with
   `UI.setValue`. On these per-player buttons (`visibility="<colour>"`) the change reached other players but not the
   host, who kept the plain «Готов передать карты». The button text is now constant, and the direction

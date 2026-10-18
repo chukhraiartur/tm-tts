@@ -237,8 +237,10 @@ function plant(obj, color, alt_click)
 		if not alt_click then
 			if Get()["Растения"].c >= plantCost then
 				Player[color].showConfirmDialog("Произвести озеленение?", function()
-					getObjectFromGUID("e4c505").takeObject({position=self.getPosition()+Vector(-4.5, 0.5, -3.5):rotateOver('y', self.getRotation()[2]), rotation={0, 270, 0},  smooth=false}).addToPlayerSelection(color)
-					getObjectFromGUID(Global.getVar("PLData").colorMarkerBag[color]).takeObject({position=self.getPosition()+Vector(-4.5, 0.75, -3.5):rotateOver('y', self.getRotation()[2]), rotation={0, 270, 0},  smooth=false})
+					getObjectFromGUID("e4c505").takeObject({position=self.getPosition()+Vector(-4.5, 0.5, -3.5):rotateOver('y', self.getRotation()[2]), rotation={0, 270, 0},  smooth=false, callback_function=function(tile)
+						-- маркер берется, когда тайл уже появился, и падает на него сверху
+						getObjectFromGUID(Global.getVar("PLData").colorMarkerBag[color]).takeObject({position=tile.getPosition()+Vector(0, 1.5, 0), rotation={0, 270, 0},  smooth=false})
+					end}).addToPlayerSelection(color)
 					getObjectFromGUID("4fdd36").call("breath", color)
 					ResNamesAdd({name="Растения", add=-plantCost})
 					printToAll(color .." проводит озеленение!")
