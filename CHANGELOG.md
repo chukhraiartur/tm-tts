@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Clear game-over screen.** When the final production phase ends the game, the on-screen tip (and the chat) shows
+  «ИГРА ОКОНЧЕНА» with a summary built from the game's settings:
+  - why the game ended: temperature, oxygen and oceans maxed. With Venus Next it says whether Venus was required
+    («Обязат. Венера») or not;
+  - what the rules skip in the last generation, listing only what applies: colony trade fleets and tracks (Colonies),
+    government support, the Turmoil phase with its −1 TR, global event and new chairman (Turmoil);
+  - the final plant-to-greenery conversion in turn order;
+  - what to score: TR, milestones, awards, greeneries, cities, cards, plus corruption with Underworld.
+
+  The ready panel is hidden so nobody presses «Готов» waiting for a phase that will not come. The state (`STEP = 6`)
+  is restored when such a save is loaded.
+
 - **Random board.** The «ПОЛЕ» setup option now cycles База → Эллада → Элизий → **Рандом**. With «Рандом», `mapSelect()`
   in Global picks one of the three boards at random when the game starts and announces it in chat.
 - **Alternating turn order** (new setup option «ЧЕРЕДОВ. ХОДА», off by default). With the option off, turns always pass

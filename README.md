@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Added:** a clear «ИГРА ОКОНЧЕНА» summary at game end, adapted to the expansions in play: why the game ended, which
+  steps are skipped (colonies, government support, Turmoil phase), the final greenery conversion and what to score.
 - **Fixed:** the automation no longer breaks when a player disconnects (generation start, card dealing, government
   support, loading a save). A disconnected player keeps their place and cards and can rejoin.
 - **Fixed:** player cubes and city figures no longer fall under greenery and city tiles placed by the automation.

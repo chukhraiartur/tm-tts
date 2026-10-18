@@ -331,6 +331,7 @@ function automatisation()  -- автоматизация всего что мо�
 	if endGame then
 		broadcastToAll("")
 		broadcastToAll("Игра окончена!")
+		gameOver()
 	else
 		if configs.colony then  -- возвращаются торговые флоты
 			objs.colonyHub.call("returnShips")
@@ -357,6 +358,37 @@ function automatisation()  -- автоматизация всего что мо�
 	end
 end
 
+function gameOver()  -- конец игры: подсказка и скрытие панели готовности
+	STEP = 6
+	-- почему конец: какие параметры требуются с учетом Венеры
+	local reason = "Температура, кислород и океаны на максимуме"
+	if configs.venus and configs.reqVenus then
+		reason = "Температура, кислород, океаны и Венера на максимуме"
+	elseif configs.venus then
+		reason = reason .." (Венера для конца игры не нужна)"
+	end
+
+	-- что по правилам не проводится в последнем поколении
+	local skipped = ""
+	if configs.colony then skipped = skipped .."\n- торговые флоты и курсы колоний не двигаются" end
+	if configs.support then skipped = skipped .."\n- правительственная поддержка" end
+	if configs.crisis then skipped = skipped .."\n- фаза Кризиса: без -1 РТ, глобального события и нового председателя" end
+	if skipped ~= "" then skipped = "\n\nНе проводятся:".. skipped end
+
+	-- подсчет очков
+	local score = "РТ, достижения, награды, озеленение (1 за тайл), города (1 за каждое соседнее озеленение), карты"
+	if configs.underworld then score = score ..", коррупция (по правилам Подземного мира)" end
+
+	local text = reason ..", производство выполнено. Поколение ".. generation .." последнее."
+		.. skipped
+		.."\n\nПеред подсчетом каждый игрок по порядку хода может превратить растения в озеленение."
+		.."\n\nОчки: ".. score .."."
+
+	Global.UI.setAttribute("TipPanel", "height", "460")  -- текст длиннее обычной подсказки
+	setTip('ИГРА ОКОНЧЕНА', text)
+	printToAll("[b]ИГРА ОКОНЧЕНА[/b]\n".. text, {1, 0.8, 0.3})  -- в чате текст не пропадет
+	Global.UI.hide("ActivePanel")
+end
 function solarStage()  -- фаза солнечной системы
 	STEP = 4
 	printToAll("")
@@ -588,7 +620,7 @@ function setUI()  -- создание интерфейса
 
 	Global.UI.setXml(UI[1] .. XML .. UI[2] .. draftXML)
 	Wait.time(function()
-		Global.UI.show("ActivePanel")
+		if STEP ~= 6 then Global.UI.show("ActivePanel") end  -- после конца игры панель готовности не нужна
 	end, 1)
 end
 function setLogs()  -- создание вкладок логов
@@ -1759,8 +1791,11 @@ function onLoad(saved_data)  -- система загрузки и блокир�
 			actions()
 		elseif saved_data.STEP == 4 then
 			solarStage()
+		elseif saved_data.STEP == 6 then  -- сохранение после конца игры
+			STEP = 6
+			Wait.time(gameOver, 2)
 		end
-		
+
 		if configs then
 			setPlayerTurns()
 			setUI()
