@@ -889,11 +889,11 @@ function placeColonys()  -- раскладка колоний
 				colonyPoses = poses
 				colonytilePos = tilePos
 				for i = 1, math.max(#playersTurns+2, 5)-#playersTurns do
-					objs.colonyMarkerBag.takeObject().setPositionSmooth({tilePos-1.47, 1.5, poses[i+1]-1})
 					local tile = objs.colonyBag.takeObject()
 					tile.setPositionSmooth({tilePos, 1.00, poses[i+1]})
 					tile.setRotation({0.00, 180.00, 0.00})
 					tile.setLock(true)
+					placeColonyMarker(tile, tilePos, poses[i+1])
 					log(i)
 				end
 				Wait.time(function()
@@ -910,11 +910,11 @@ function placeColonys()  -- раскладка колоний
 				end, 2)
 			else
 				for i = 1, math.max(#playersTurns+2, 5) do
-					objs.colonyMarkerBag.takeObject().setPositionSmooth({tilePos-1.47, 1.5, poses[i+1]-1})
 					local tile = objs.colonyBag.takeObject()
 					tile.setPositionSmooth({tilePos, 1.00, poses[i+1]})
 					tile.setRotation({0.00, 180.00, 0.00})
 					tile.setLock(true)
+					placeColonyMarker(tile, tilePos, poses[i+1])
 				end
 			end
 			
@@ -1203,8 +1203,17 @@ function finishControlStart()  -- лишние жетоны из рук в ко�
 			tile.setPositionSmooth(slot)
 			tile.setRotation({0.00, 180.00, 0.00})
 			tile.setLock(true)
-			objs.colonyMarkerBag.takeObject().setPositionSmooth({colonytilePos-1.47, 1.5, colonyPoses[i+1]-1})
+			placeColonyMarker(tile, colonytilePos, colonyPoses[i+1])
 		end
+	end
+end
+INACTIVE_COLONIES = {["Титан"] = true, ["Энцелад"] = true, ["Миранда"] = true}  -- ждут карту с флоатерами / микробами / животными
+function placeColonyMarker(tile, x, z)  -- маркер торгового курса: на 2-ю клетку трека или, у неактивной колонии, вне трека
+	if INACTIVE_COLONIES[tile.getName()] then
+		-- на картинку планеты справа: колония неактивна, colonyMarkerMove такой маркер не двигает
+		objs.colonyMarkerBag.takeObject().setPositionSmooth({x+1.6, 1.5, z+0.4})
+	else
+		objs.colonyMarkerBag.takeObject().setPositionSmooth({x-1.47, 1.5, z-1})
 	end
 end
 function addColonySnapPoints(tilePos, poses, count)  -- магнитные места для колоний

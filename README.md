@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Fixed:** Titan, Enceladus and Miranda start inactive: their trade marker is placed off the track until a card that
+  holds their resource appears.
 - **Added:** setup option «РАНДОМ ДОПОВ»: Venus, Turmoil and Colonies are rolled at random (50% each), and with Venus
   also whether Venus is mandatory.
 - **Fixed:** custom start («Выбор. старт») now works like the group plays: place the chosen tokens, press «Готов».

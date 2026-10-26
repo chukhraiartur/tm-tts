@@ -59,6 +59,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Inactive colonies started on the trade track.** Titan (floaters), Enceladus (microbes) and Miranda (animals)
+  can't be used until a card that holds that resource is in play, but their trade marker was placed on the 2nd track
+  step like any other colony. Their marker is now placed off the track, on the planet art (`INACTIVE_COLONIES`,
+  `placeColonyMarker` in Global). The yearly colony track movement skips it. Players move it onto the track by hand
+  when such a card appears. Works in the normal setup and in the custom start.
 - **«Обязат. Венера» without Venus.** The option could be turned on without the Venus expansion. The game-end check
   would then read the Venus board, which is not on the table. Now it can only be turned on together with Venus, and
   turning Venus off clears it.
