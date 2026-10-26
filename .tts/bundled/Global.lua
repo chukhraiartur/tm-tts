@@ -877,7 +877,8 @@ function placeColonys()  -- раскладка колоний
 				table.insert(sizes, 4.5)
 			end
 			poses = posTiles(sizes)
-			
+			addColonySnapPoints(tilePos, poses, math.max(#playersTurns+2, 5))
+
 			objs.colonyHub = takeName(DLCBoxCard.colony.guid, {name = "Торговый флот"})  -- выкладывание колоний
 			objs.colonyHub.setPositionSmooth({tilePos, 1.00, poses[1]})
 			objs.colonyHub.setRotation({0.00, 180.00, 0.00})
@@ -897,7 +898,14 @@ function placeColonys()  -- раскладка колоний
 				end
 				Wait.time(function()
 					for _, PL in ipairs(playersTurns) do
-						objs.colonyBag.deal(configs.controlStart, PL, 3)
+						-- у жетонов колоний выключено "можно держать в руке": deal клал их на стол, и выбор не засчитывался
+						for k = 1, configs.controlStart do
+							objs.colonyBag.takeObject({position = Player[PL].getHandTransform(3).position + Vector(0, 2, 0), callback_function = function(colony)
+								colony.use_hands = true
+								colony.setRotation({0, Player[PL].getHandTransform(3).rotation.y + 180, 0})  -- лицом вверх, к игроку (как карты)
+								colony.setPosition(Player[PL].getHandTransform(3).position)
+							end})
+						end
 					end
 				end, 2)
 			else
@@ -1130,11 +1138,13 @@ function onPlayerTurn(player, previous_player)  -- обновление ходо
 		end
 	end
 end
-function controlStart()  -- настраиваемый старт
-	--Notes.setNotes('ФАЗА ПОДГОТОВКИ\n\nВыберите по одному жетону [b]достижения, награды, спонсора и колонии[/b]. Переложите выбранные жетоны в нижнюю малую руку, когда все игроки выберут жетоны, они войдут в игру.')
-	setTip('ФАЗА ПОДГОТОВКИ', 'Выберите по одному жетону ДОСТИЖЕНИЯ, НАГРАДЫ, СПОНСОРА И КОЛОНИИ. Переложите выбранные жетоны в нижнюю малую руку, когда все игроки выберут жетоны, они войдут в игру.')
+function controlStart()  -- настраиваемый старт: игроки выкладывают выбранные жетоны сами и жмут "Готов"
+	local kinds = {}  -- только включенные типы жетонов
+	if configs.randomMA then table.insert(kinds, "ДОСТИЖЕНИЕ (на планшет достижений)") table.insert(kinds, "НАГРАДУ (на планшет наград)") end
+	if configs.sponsorship then table.insert(kinds, "СПОНСОРА (к спонсорам)") end
+	if configs.colony then table.insert(kinds, "КОЛОНИЮ (на свободное место в ряду колоний)") end
+	setTip('ФАЗА ПОДГОТОВКИ', 'Выложите на стол по одному: '.. table.concat(kinds, ", ") ..'.\n\nЛишние жетоны оставьте в руке - они вернутся в колоду сами. Затем нажмите "Готов".')
 	
-	spawnDraftHand()
 	for _, PL in ipairs(playersTurns) do
 		if configs.sponsorship then
 			objs.sponsorDeck.deal(configs.controlStart, PL, 1)
@@ -1146,109 +1156,63 @@ function controlStart()  -- настраиваемый старт
 	end
 	
 	Wait.condition(function()
-		CSTokensRefill()
-		removeDraftHand()
+		finishControlStart()
 		buyCard() -- фаза исследований (покупка карт)
 	end, function()
-		
-		startReady = true  -- подcчет жетонов в руках
-		tokenCount = {}
-		for _, color in ipairs(playersTurns) do
-			tokenCount[color] = {Sponsor = 0, Milstone = 0, Award = 0, Colony = 0}
-			for __, obj in ipairs(Player[color].getHandObjects(Player[color].getHandCount())) do
-				if obj.type == "Card" then
-					for i, v in pairs(obj.getData().CustomDeck) do
-						if v.BackURL == "https://steamusercontent-a.akamaihd.net/ugc/28811178277742185/1E5CD93249373D9E124B2060581F43DC5BF921FF/" then
-							tokenCount[color].Sponsor = tokenCount[color].Sponsor + 1
-						elseif v.BackURL == "https://steamusercontent-a.akamaihd.net/ugc/28812445892062376/2A6C6D3AA5FC654AFFD6F3260AFAC83514571181/" then
-							tokenCount[color].Milstone = tokenCount[color].Milstone + 1
-						elseif v.BackURL == "https://steamusercontent-a.akamaihd.net/ugc/28812445892062293/66A0D24C0E463AED66FBB72DBA00496B34EFC9DE/" then
-							tokenCount[color].Award = tokenCount[color].Award + 1
-						end
-					end
-				elseif obj.type == "Tile" then
-					if obj.getDescription() == "Колония" then
-						tokenCount[color].Colony = tokenCount[color].Colony + 1
-					end
-				end
-			end
-			
-			if configs.sponsorship then  -- проверка нужных жетонов и пустой руки
-				startReady = startReady and tokenCount[color].Sponsor == 1 and #Player[color].getHoldingObjects() == 0
-			end
-			if configs.randomMA then
-				startReady = startReady and tokenCount[color].Milstone == 1 and tokenCount[color].Award == 1 and #Player[color].getHoldingObjects() == 0
-			end
-			if configs.colony then
-				startReady = startReady and tokenCount[color].Colony == 1 and #Player[color].getHoldingObjects() == 0
-			end
-		end
-		return startReady
+		return allReady(1)  -- ожидание готовности
 	end)
 end
-function CSTokensRefill()  -- заполнение наград и спонсорств
-	local MACount = 5
-	if configs.venus then
-		MACount = 6
-	end
-	
-	colonyNames = {}
-	for _, color in ipairs(playersTurns) do  -- уборка жетонов в колоду
-		for __, obj in ipairs(Player[color].getHandObjects(Player[color].getHandCount())) do
-			if obj.type == "Card" then
-				for i, v in pairs(obj.getData().CustomDeck) do
-					if v.BackURL == "https://steamusercontent-a.akamaihd.net/ugc/28811178277742185/1E5CD93249373D9E124B2060581F43DC5BF921FF/" then
-						objs.sponsorDeck.putObject(obj)
-					elseif v.BackURL == "https://steamusercontent-a.akamaihd.net/ugc/28812445892062376/2A6C6D3AA5FC654AFFD6F3260AFAC83514571181/" then
-						objs.milstoneDeck.putObject(obj)
-					elseif v.BackURL == "https://steamusercontent-a.akamaihd.net/ugc/28812445892062293/66A0D24C0E463AED66FBB72DBA00496B34EFC9DE/" then
-						objs.awardDeck.putObject(obj)
+function finishControlStart()  -- лишние жетоны из рук в колоды, колонии игроков - на места с маркерами
+	local backs = {
+		["https://steamusercontent-a.akamaihd.net/ugc/28811178277742185/1E5CD93249373D9E124B2060581F43DC5BF921FF/"] = objs.sponsorDeck,
+		["https://steamusercontent-a.akamaihd.net/ugc/28812445892062376/2A6C6D3AA5FC654AFFD6F3260AFAC83514571181/"] = objs.milstoneDeck,
+		["https://steamusercontent-a.akamaihd.net/ugc/28812445892062293/66A0D24C0E463AED66FBB72DBA00496B34EFC9DE/"] = objs.awardDeck,
+	}
+	for _, color in ipairs(playersTurns) do  -- все руки игрока: остались только невыбранные жетоны
+		for hand = 1, Player[color].getHandCount() do
+			for __, obj in ipairs(Player[color].getHandObjects(hand) or {}) do
+				if obj.type == "Card" then
+					for ___, v in pairs(obj.getData().CustomDeck) do
+						if backs[v.BackURL] then backs[v.BackURL].putObject(obj) end
 					end
-				end
-			elseif obj.type == "Tile" then
-				if obj.getDescription() == "Колония" then
-					table.insert(colonyNames, obj.getName())
+				elseif obj.getDescription() == "Колония" and configs.colony then
+					obj.use_hands = false
 					objs.colonyBag.putObject(obj)
 				end
 			end
 		end
 	end
 	
-	if configs.sponsorship then  -- заполнение спонсоров
-		local pos = {{-14.27, 1.5, -9.62}, {-11.74, 1.5, -9.22}, {-9.21, 1.5, -9.02}, {-6.69, 1.5, -9.02}, {-4.16, 1.5, -9.22}, {-1.63, 1.5, -9.62}}
-		for i = 7-#playersTurns, 6 do
-			objs.sponsorDeck.takeObject({
-				position = pos[i],
-				rotation = {0.00, 180.00, 0.00},
-			})
-		end
-	end
-	if configs.randomMA then  -- заполнение наград
-		for i = MACount-#playersTurns+1, MACount do
-			objs.milstoneDeck.takeObject({
-				position = {-14.2+12.6/(MACount-1)*(i-1), 1.5, -12.15},
-				rotation = {0.00, 180.00, 0.00},
-			})
-			objs.awardDeck.takeObject({
-				position = {2.26+12.6/(MACount-1)*(i-1), 1.5, -12.15},
-				rotation = {0.00, 180.00, 0.00},
-			})
-		end
-	end
-	if configs.colony then  -- заполнение колоний
-		Wait.time(function()
-			poses = colonyPoses
-			tilePos = colonytilePos
-			for i = math.max(#playersTurns+2, 5)-#playersTurns+1, math.max(#playersTurns+2, 5) do
-				log(colonyNames[1])
-				objs.colonyMarkerBag.takeObject().setPositionSmooth({tilePos-1.47, 1.5, poses[i+1]-1})
-				local tile = objs.colonyBag.takeObject()
-				tile.setPositionSmooth({tilePos, 1.00, poses[i+1]})
-				tile.setRotation({0.00, 180.00, 0.00})
-				tile.setLock(true)
+	if configs.colony then  -- места колоний игроков: выровнять выложенную колонию или взять из мешка
+		local count = math.max(#playersTurns+2, 5)
+		for i = count-#playersTurns+1, count do
+			local slot = Vector(colonytilePos, 1.00, colonyPoses[i+1])
+			local tile = nil
+			for _, obj in ipairs(getObjects()) do
+				local pos = obj.getPosition()
+				if obj.getDescription() == "Колония" and Vector(pos.x, 0, pos.z):distance(Vector(slot.x, 0, slot.z)) < 2.2 then
+					tile = obj
+					break
+				end
 			end
-		end, 2)
+			if tile == nil then
+				tile = objs.colonyBag.takeObject()
+				printToAll("Пустое место колонии заполнено из мешка: ".. tile.getName())
+			end
+			tile.use_hands = false
+			tile.setPositionSmooth(slot)
+			tile.setRotation({0.00, 180.00, 0.00})
+			tile.setLock(true)
+			objs.colonyMarkerBag.takeObject().setPositionSmooth({colonytilePos-1.47, 1.5, colonyPoses[i+1]-1})
+		end
 	end
+end
+function addColonySnapPoints(tilePos, poses, count)  -- магнитные места для колоний
+	local points = Global.getSnapPoints()
+	for i = 1, count do
+		table.insert(points, {position = {tilePos, 1.00, poses[i+1]}, rotation = {0, 180, 0}, rotation_snap = true})
+	end
+	Global.setSnapPoints(points)
 end
 
 function allReady(state)  -- проверка готовности игроков

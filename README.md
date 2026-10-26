@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Fixed:** custom start («Выбор. старт») now works like the group plays: place the chosen tokens, press «Готов».
+  Leftovers return to their decks and colony slots are aligned automatically. Colony slots now have snap points.
 - **Added:** a clear «ИГРА ОКОНЧЕНА» summary at game end, adapted to the expansions in play: why the game ended, which
   steps are skipped (colonies, government support, Turmoil phase), the final greenery conversion and what to score.
 - **Fixed:** the automation no longer breaks when a player disconnects (generation start, card dealing, government

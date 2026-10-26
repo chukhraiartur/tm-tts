@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Snap points for colony slots.** Every slot of the colony row gets a global snap point (`Global.setSnapPoints`),
+  so colonies placed by hand snap into place. This works in both the normal and the custom start.
 - **Clear game-over screen.** When the final production phase ends the game, the on-screen tip (and the chat) shows
   «ИГРА ОКОНЧЕНА» with a summary built from the game's settings:
   - why the game ended: temperature, oxygen and oceans maxed. With Venus Next it says whether Venus was required
@@ -51,6 +53,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Custom start («Выбор. старт») never finishing, reworked around the ready button.** The old flow waited until
+  every player had exactly one token of each enabled type in a hidden lower draft hand, without using the «Готов»
+  button. With Colonies it could never finish: colony tokens have «can be held in hand» turned off (`Hands = false`),
+  so they were dealt onto the table and could not be put into the draft hand. The flow now matches how the group
+  plays:
+  - tokens are dealt into the hand as before. Colonies are taken one by one with `use_hands = true`, so they really
+    land in hand 3, face up and turned towards the player like cards;
+  - players place the chosen tokens on the table themselves (colony into a free slot of the colony row, milestone and
+    award onto their boards, sponsor next to the sponsors) and press «Готов»;
+  - when everyone is ready, tokens left in any hand go back to their decks and the colony bag. Colonies in the
+    players' slots are aligned and locked, get a colony track marker, and a slot left empty is filled from the bag.
+    Then the buying phase starts;
+  - the phase tip lists only the enabled token types and where to put each one.
 - **Automation breaking when a player disconnects.** Several places in Global assumed every player is seated:
   - the first-player announcement used `Player[color].steam_name`, which is `nil` for a disconnected player. The Lua
     error stopped the start of the generation: no cards dealt, no draft, no buying phase. Names now go through
