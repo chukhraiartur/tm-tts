@@ -39,6 +39,9 @@ buttonsData = {
 	{tooltip = "Чередование хода:\nВ четных поколениях ход передается по часовой стрелке, в нечетных - против часовой (как в драфте)\nВыключено - всегда по часовой",
 	position = {0.4, 0.3, 0.191}, click_function = "FaltTurns"},
 
+	{tooltip = "Рандом дополнений:\nСлучайно включает или выключает Венеру, Кризис и Колонии (каждое - 50%)\nЕсли Венера выпала, обязательная Венера тоже разыгрывается (50%), без Венеры ее нет\nПока опция включена, эти опции нельзя менять вручную",
+	position = {0.4, 0.3, 0.299}, click_function = "FrandomDLC"},
+
 	{tooltip = "Закончить подготовку и начать игру!",
 	position = {0, 0.3, 0.9}, scale = {0.4, 1, 0.4}, click_function = "finishSetup"},
 }
@@ -63,7 +66,10 @@ checksData = {
 	{tooltip = "randomMA",			position = {0.9, 0.2, -0.025}},
 	{tooltip = "controlStart",	position = {0.9, 0.2, 0.083}},
 	{tooltip = "altTurns",		position = {0.9, 0.2, 0.191}},
+	{tooltip = "randomDLC",		position = {0.9, 0.2, 0.299}},
 }
+RANDOM_DLC = {"venus", "crisis", "colony"}  -- дополнения для опции "Рандом допов"
+RANDOM_DLC_NAMES = {venus = "Венера", crisis = "Кризис", colony = "Колонии"}
 
 config = {
 	eraCorp = false,
@@ -86,6 +92,7 @@ config = {
 	randomMA = false,
 	controlStart = 0,
 	altTurns = false,
+	randomDLC = false,
 }
 
 
@@ -117,15 +124,22 @@ function Fprologe()
 	config.prologe = not config.prologe
 	updateCheck("prologe")
 end
-function Fvenus()
+function Fvenus(obj, color)
+	if randomDLCLocked(color) then return end
 	config.venus = not config.venus
 	updateCheck("venus")
+	if not config.venus and config.reqVenus then  -- обязательная Венера без Венеры невозможна
+		config.reqVenus = false
+		updateCheck("reqVenus")
+	end
 end
-function Fcolony()
+function Fcolony(obj, color)
+	if randomDLCLocked(color) then return end
 	config.colony = not config.colony
 	updateCheck("colony")
 end
-function Fcrisis()
+function Fcrisis(obj, color)
+	if randomDLCLocked(color) then return end
 	config.crisis = not config.crisis
 	updateCheck("crisis")
 end
@@ -171,7 +185,12 @@ function Fdraft()
 	config.draft = not config.draft
 	updateCheck("draft")
 end
-function FreqVenus()
+function FreqVenus(obj, color)
+	if randomDLCLocked(color) then return end
+	if not config.reqVenus and not config.venus then
+		broadcastToColor("Обязательная Венера доступна только с дополнением Венера", color, {1, 0.5, 0})
+		return
+	end
 	config.reqVenus = not config.reqVenus
 	updateCheck("reqVenus")
 end
@@ -189,6 +208,43 @@ end
 function FaltTurns()
 	config.altTurns = not config.altTurns
 	updateCheck("altTurns")
+end
+function FrandomDLC()  -- рандом Венеры, Кризиса и Колоний
+	config.randomDLC = not config.randomDLC
+	updateCheck("randomDLC")
+	local rolled = {}
+	for _, dlc in ipairs(RANDOM_DLC) do
+		if config.randomDLC then
+			config[dlc] = math.random(2) == 1  -- как бросок кубика: 50%
+			if config[dlc] then table.insert(rolled, RANDOM_DLC_NAMES[dlc]) end
+		else
+			config[dlc] = false
+		end
+		updateCheck(dlc)
+		setCheckActive(dlc, not config.randomDLC)
+	end
+	-- обязательная Венера: 50% только если Венера выпала, без Венеры - всегда нет
+	config.reqVenus = config.randomDLC and config.venus and math.random(2) == 1
+	if config.reqVenus then table.insert(rolled, "обязательная Венера") end
+	updateCheck("reqVenus")
+	setCheckActive("reqVenus", not config.randomDLC)
+	if config.randomDLC then
+		printToAll("Рандом дополнений: ".. (#rolled > 0 and table.concat(rolled, ", ") or "без дополнений"), {1, 0.6, 0.2})
+	end
+end
+function randomDLCLocked(color)  -- опция дополнения заблокирована рандомом
+	if config.randomDLC then
+		broadcastToColor('Включен "Рандом допов": выключите его, чтобы выбрать дополнения вручную', color, {1, 0.5, 0})
+		return true
+	end
+	return false
+end
+function setCheckActive(check, active)  -- неактивная опция - серый значок
+	for _, button in pairs(self.getButtons()) do
+		if button.tooltip == check then
+			self.editButton({index = button.index, font_color = active and {1, 0.44, 0} or {0.4, 0.4, 0.4}})
+		end
+	end
 end
 
 function finishSetup()

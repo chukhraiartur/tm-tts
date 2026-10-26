@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Random expansions** (new setup option «РАНДОМ ДОПОВ»). Turning it on rolls Venus, Turmoil and Colonies
+  independently (50% each, like a die roll: any combination from none to all three is possible). If Venus is rolled,
+  «Обязат. Венера» is rolled too (50%). Without Venus it is always off. The result is shown as checkmarks and in chat.
+  While the option is on, these four options are greyed out and can't be clicked. Turning it off clears them and
+  makes them clickable again. The
+  option label is drawn on the settings tile image (`assets/settings-tile.png`).
 - **Snap points for colony slots.** Every slot of the colony row gets a global snap point (`Global.setSnapPoints`),
   so colonies placed by hand snap into place. This works in both the normal and the custom start.
 - **Clear game-over screen.** When the final production phase ends the game, the on-screen tip (and the chat) shows
@@ -53,6 +59,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **«Обязат. Венера» without Venus.** The option could be turned on without the Venus expansion. The game-end check
+  would then read the Venus board, which is not on the table. Now it can only be turned on together with Venus, and
+  turning Venus off clears it.
 - **Custom start («Выбор. старт») never finishing, reworked around the ready button.** The old flow waited until
   every player had exactly one token of each enabled type in a hidden lower draft hand, without using the «Готов»
   button. With Colonies it could never finish: colony tokens have «can be held in hand» turned off (`Hands = false`),

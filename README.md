@@ -8,6 +8,8 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Added:** setup option «РАНДОМ ДОПОВ»: Venus, Turmoil and Colonies are rolled at random (50% each), and with Venus
+  also whether Venus is mandatory.
 - **Fixed:** custom start («Выбор. старт») now works like the group plays: place the chosen tokens, press «Готов».
   Leftovers return to their decks and colony slots are aligned automatically. Colony slots now have snap points.
 - **Added:** a clear «ИГРА ОКОНЧЕНА» summary at game end, adapted to the expansions in play: why the game ended, which
@@ -149,6 +151,7 @@ All options are set on the settings tile before the game starts:
 | Random milestones & awards | Replaces the board's milestones and awards with 5 (6 with Venus) random ones out of 62 |
 | Custom start | Players get 2–4 milestone, award, colony and sponsor tokens and choose which ones go on the table |
 | Alternating turns («ЧЕРЕДОВ. ХОДА») | Off: turns always pass clockwise. On: clockwise in even generations, counter-clockwise in odd ones |
+| Random expansions («РАНДОМ ДОПОВ») | Rolls Venus, Turmoil and Colonies (50% each); with Venus also rolls «Обязат. Венера» (50%). Locks these options; turning it off clears and unlocks them |
 
 ## Development
 
