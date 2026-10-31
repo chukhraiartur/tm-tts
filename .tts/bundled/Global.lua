@@ -659,8 +659,10 @@ function cardSetup()  -- сбор колод
 	if configs.ares == false then  -- замена карт Ареса
 		takeName(DLCBoxCard.base.guid, {name = 'Базовые без "Ареса"'}).setPositionSmooth(deckPos.project[1])
 		takeName(DLCBoxCard.base.guid, {name = 'Базовые без "Ареса"'}).setRotationSmooth(deckPos.project[2])
-		takeName(DLCBoxCard.eraCorp.guid, {name = 'Эра корпораций без "Арес"'}).setPositionSmooth(deckPos.project[1])
-		takeName(DLCBoxCard.eraCorp.guid, {name = 'Эра корпораций без "Арес"'}).setRotationSmooth(deckPos.project[2])
+		if configs.eraCorp then  -- без Эры корпораций ее карт в колоде быть не должно
+			takeName(DLCBoxCard.eraCorp.guid, {name = 'Эра корпораций без "Арес"'}).setPositionSmooth(deckPos.project[1])
+			takeName(DLCBoxCard.eraCorp.guid, {name = 'Эра корпораций без "Арес"'}).setRotationSmooth(deckPos.project[2])
+		end
 	end
 end
 function cardDeal()  -- выдача карт

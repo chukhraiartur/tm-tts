@@ -39,7 +39,7 @@ buttonsData = {
 	{tooltip = "Чередование хода:\nВ четных поколениях ход передается по часовой стрелке, в нечетных - против часовой (как в драфте)\nВыключено - всегда по часовой",
 	position = {0.4, 0.3, 0.191}, click_function = "FaltTurns"},
 
-	{tooltip = "Рандом дополнений:\nСлучайно включает или выключает Венеру, Кризис и Колонии (каждое - 50%)\nЕсли Венера выпала, обязательная Венера тоже разыгрывается (50%), без Венеры ее нет\nПока опция включена, эти опции нельзя менять вручную",
+	{tooltip = "Рандом дополнений:\nСлучайно включает или выключает Эру корпораций, Венеру, Колонии, Кризис, Первооткрывателей и Арес (каждое - 50%)\nЕсли Венера выпала, обязательная Венера тоже разыгрывается (50%), без Венеры ее нет\nПока опция включена, эти опции нельзя менять вручную",
 	position = {0.4, 0.3, 0.299}, click_function = "FrandomDLC"},
 
 	{tooltip = "Закончить подготовку и начать игру!",
@@ -68,8 +68,8 @@ checksData = {
 	{tooltip = "altTurns",		position = {0.9, 0.2, 0.191}},
 	{tooltip = "randomDLC",		position = {0.9, 0.2, 0.299}},
 }
-RANDOM_DLC = {"venus", "crisis", "colony"}  -- дополнения для опции "Рандом допов"
-RANDOM_DLC_NAMES = {venus = "Венера", crisis = "Кризис", colony = "Колонии"}
+RANDOM_DLC = {"eraCorp", "venus", "colony", "crisis", "pathfinders", "ares"}  -- дополнения для опции "Рандом допов"
+RANDOM_DLC_NAMES = {eraCorp = "Эра корпораций", venus = "Венера", colony = "Колонии", crisis = "Кризис", pathfinders = "Первооткрыватели", ares = "Арес"}
 
 config = {
 	eraCorp = false,
@@ -116,7 +116,8 @@ function onLoad()
 end
 
 
-function FeraCorp()
+function FeraCorp(obj, color)
+	if randomDLCLocked(color) then return end
 	config.eraCorp = not config.eraCorp
 	updateCheck("eraCorp")
 end
@@ -143,11 +144,13 @@ function Fcrisis(obj, color)
 	config.crisis = not config.crisis
 	updateCheck("crisis")
 end
-function Fpathfinders()
+function Fpathfinders(obj, color)
+	if randomDLCLocked(color) then return end
 	config.pathfinders = not config.pathfinders
 	updateCheck("pathfinders")
 end
-function Fares()
+function Fares(obj, color)
+	if randomDLCLocked(color) then return end
 	config.ares = not config.ares
 	updateCheck("ares")
 end

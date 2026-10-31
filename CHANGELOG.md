@@ -7,10 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **Random expansions** (new setup option «РАНДОМ ДОПОВ»). Turning it on rolls Venus, Turmoil and Colonies
-  independently (50% each, like a die roll: any combination from none to all three is possible). If Venus is rolled,
+- **Random expansions** (new setup option «РАНДОМ ДОПОВ»). Turning it on rolls Corporate Era, Venus, Colonies, Turmoil,
+  Pathfinders and Ares independently (50% each, like a die roll: any combination is possible). If Venus is rolled,
   «Обязат. Венера» is rolled too (50%). Without Venus it is always off. The result is shown as checkmarks and in chat.
-  While the option is on, these four options are greyed out and can't be clicked. Turning it off clears them and
+  While the option is on, these options are greyed out and can't be clicked. Turning it off clears them and
   makes them clickable again. The
   option label is drawn on the settings tile image (`assets/settings-tile.png`).
 - **Snap points for colony slots.** Every slot of the colony row gets a global snap point (`Global.setSnapPoints`),
@@ -59,6 +59,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Corporate Era cards without Corporate Era.** With Ares off, the 4 cards of «Эра корпораций без "Арес"» always went
+  into the project deck, even with Corporate Era off. They are now added only with Corporate Era.
 - **Inactive colonies started on the trade track.** Titan (floaters), Enceladus (microbes) and Miranda (animals)
   can't be used until a card that holds that resource is in play, but their trade marker was placed on the 2nd track
   step like any other colony. Their marker is now placed off the track, on the planet art (`INACTIVE_COLONIES`,
