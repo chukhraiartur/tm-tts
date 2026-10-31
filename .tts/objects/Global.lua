@@ -1599,18 +1599,59 @@ function moveFirstPlayerToken(newFirstPlayer)  -- объявление и пер
 	broadcastToAll(playerName(newFirstPlayer) .." теперь первый игрок")
 	Turns.turn_color = newFirstPlayer
 end
+TURMOIL_ONLY_CARDS = {  -- карты Первооткрывателей, которые нельзя сыграть без Кризиса (GUID карт)
+	['Проекты "Первооткрыватели"'] = {
+		"9b588e",  -- Зал для приема лоббистов
+		"bda28a",  -- Красный город
+		"437cd6",  -- База на Венере
+		"72bb9e",  -- Узловая станция
+		"34c93d",  -- Детоксификация почвы
+		"ccd775",  -- Высокотемпературные сверхпроводники
+		"ab8e41",  -- Грант, проспонсированный государством
+	},
+	['Корпорации "Первооткрыватели"'] = {
+		"9b4f3d",  -- Mars Frontier Alliance
+		"f3e838",  -- Mind Set Mars
+	},
+	['Прологи "Первооткрыватели"'] = {
+		"93b7a9",  -- Марсиане с опытом
+		"a4de16",  -- Новая космическая гонка
+	},
+}
+function takeDeckWithoutCards(container, index, testDeck, guids)  -- колода сначала в стороне, чтобы не смешалась со стопкой
+	local side = container.getPosition() + Vector(0, 4, 0)
+	container.takeObject({
+		index = index,
+		position = side,
+		rotation = testDeck.pos[2],
+		smooth = false,
+		callback_function = function(deck)
+			for _, guid in ipairs(guids) do
+				deck.takeObject({guid = guid, position = side + Vector(0, 6, 0), smooth = false, callback_function = function(card)
+					card.destruct()
+				end})
+			end
+			deck.setRotationSmooth(testDeck.pos[2])
+			deck.setPositionSmooth(testDeck.pos[1])
+		end,
+	})
+end
 function takeDecks(array)  -- выкладывание колод дополнений
 	for _, dlc in pairs(array) do
 		container = getObjectFromGUID(dlc.guid)
 		for __, testDeck in pairs(dlc.content) do
 			for ___, obj in pairs(container.getObjects()) do
 				if obj.name == testDeck.name then
-					container.takeObject({
-						index = obj.index,
-						position = testDeck.pos[1],
-						rotation = testDeck.pos[2],
-						smooth = true,
-					})
+					if TURMOIL_ONLY_CARDS[testDeck.name] and not configs.crisis then
+						takeDeckWithoutCards(container, obj.index, testDeck, TURMOIL_ONLY_CARDS[testDeck.name])
+					else
+						container.takeObject({
+							index = obj.index,
+							position = testDeck.pos[1],
+							rotation = testDeck.pos[2],
+							smooth = true,
+						})
+					end
 				end
 			end
 		end
