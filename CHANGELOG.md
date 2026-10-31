@@ -61,6 +61,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Turmoil card text** (new sheets in Steam Cloud, set in the save). Utopia Invest: the missing 40 M€ icon, text and a
+  typo. Pristar: 53 M€, −2 TR, the effect gives 6 M€ once. Mons Insurance: translated and completed. All 12 projects
+  with a party requirement now say «2 ваших делегатов», as in the English original.
 - **Corporate Era cards without Corporate Era.** With Ares off, the 4 cards of «Эра корпораций без "Арес"» always went
   into the project deck, even with Corporate Era off. They are now added only with Corporate Era.
 - **Inactive colonies started on the trade track.** Titan (floaters), Enceladus (microbes) and Miranda (animals)

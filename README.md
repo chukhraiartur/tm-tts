@@ -218,6 +218,9 @@ Notes:
   absent players ready» could help.
 - **Resume the draft after a reload.** The research phase (`STEP = 5`) is not restored in `onLoad`, so reloading the
   table in the middle of a draft loses the draft state.
+- **Card text and quality.** Fix Arklight («1 VP per 2 animals», Colonies) and the garbled text of Adhai (Pathfinders),
+  then review the other expansions. Open Turmoil items: Lakefront Resorts shows 52 M€ (officially 54), typos in the
+  global events («меку» instead of «метку»), and bad scans of project cards to replace with localized English cards.
 - **Undo support for the city counters.** After `Ctrl+Z` the counters update only on the next action with a city tile.
 - **Original author's TODO list** (from the header of `Global.lua`): automatic colony trading, automatic placement of
   neutral delegates, delegate handling as in the rules, moving global parameter counters into the Global script,
