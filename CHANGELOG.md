@@ -61,9 +61,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- **Pathfinders cards that need Turmoil.** Without Turmoil, 11 cards that can't be played are removed from the Pathfinders
-  decks at setup: 7 projects, the corporations Mars Frontier Alliance and Mind Set Mars, and 2 preludes (`TURMOIL_ONLY_CARDS`
-  in Global).
+- **Pathfinders cards that need another expansion.** Each deck keeps its common cards, and its conditional cards go into the
+  game only with the expansion they need (`CONDITIONAL_CARDS` in Global). Without Turmoil: 7 projects, the corporations
+  Mars Frontier Alliance and Mind Set Mars, and 2 preludes. Without Colonies: 3 projects, the corporations Collegium
+  Copernicus and Adhai, and 2 preludes.
 - **Turmoil card text** (new sheets in Steam Cloud, set in the save). Utopia Invest: the missing 40 M€ icon, text and a
   typo. Pristar: 53 M€, −2 TR, the effect gives 6 M€ once. Mons Insurance: translated and completed. All 12 projects
   with a party requirement now say «2 ваших делегатов», as in the English original.

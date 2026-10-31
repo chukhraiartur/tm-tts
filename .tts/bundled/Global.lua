@@ -1599,25 +1599,55 @@ function moveFirstPlayerToken(newFirstPlayer)  -- объявление и пер
 	broadcastToAll(playerName(newFirstPlayer) .." теперь первый игрок")
 	Turns.turn_color = newFirstPlayer
 end
-TURMOIL_ONLY_CARDS = {  -- карты Первооткрывателей, которые нельзя сыграть без Кризиса (GUID карт)
+CONDITIONAL_CARDS = {  -- карты колоды, которые идут в игру только вместе с указанным дополнением (GUID карт)
 	['Проекты "Первооткрыватели"'] = {
-		"9b588e",  -- Зал для приема лоббистов
-		"bda28a",  -- Красный город
-		"437cd6",  -- База на Венере
-		"72bb9e",  -- Узловая станция
-		"34c93d",  -- Детоксификация почвы
-		"ccd775",  -- Высокотемпературные сверхпроводники
-		"ab8e41",  -- Грант, проспонсированный государством
+		crisis = {
+			"9b588e",  -- Зал для приема лоббистов
+			"bda28a",  -- Красный город
+			"437cd6",  -- База на Венере
+			"72bb9e",  -- Узловая станция
+			"34c93d",  -- Детоксификация почвы
+			"ccd775",  -- Высокотемпературные сверхпроводники
+			"ab8e41",  -- Грант, проспонсированный государством
+		},
+		colony = {
+			"8989f3",  -- Обсерватория Пойгенса
+			"e3150e",  -- Станция Кассини
+			"959a68",  -- Скоординированный рейд
+		},
 	},
 	['Корпорации "Первооткрыватели"'] = {
-		"9b4f3d",  -- Mars Frontier Alliance
-		"f3e838",  -- Mind Set Mars
+		crisis = {
+			"9b4f3d",  -- Mars Frontier Alliance
+			"f3e838",  -- Mind Set Mars
+		},
+		colony = {
+			"422c3b",  -- Collegium Copernicus
+			"4e44f9",  -- Adhai High Orbit Constructions
+		},
 	},
 	['Прологи "Первооткрыватели"'] = {
-		"93b7a9",  -- Марсиане с опытом
-		"a4de16",  -- Новая космическая гонка
+		crisis = {
+			"93b7a9",  -- Марсиане с опытом
+			"a4de16",  -- Новая космическая гонка
+		},
+		colony = {
+			"8aa2ba",  -- Колония ключевого значения
+			"6d43b3",  -- Стратегическое планирование базы
+		},
 	},
 }
+function disabledCards(deckName)  -- условные карты колоды, для которых нет нужного дополнения
+	local guids = {}
+	for dlc, cards in pairs(CONDITIONAL_CARDS[deckName] or {}) do
+		if not configs[dlc] then
+			for _, guid in ipairs(cards) do
+				table.insert(guids, guid)
+			end
+		end
+	end
+	return guids
+end
 function takeDeckWithoutCards(container, index, testDeck, guids)  -- колода сначала в стороне, чтобы не смешалась со стопкой
 	local side = container.getPosition() + Vector(0, 4, 0)
 	container.takeObject({
@@ -1642,8 +1672,9 @@ function takeDecks(array)  -- выкладывание колод дополне
 		for __, testDeck in pairs(dlc.content) do
 			for ___, obj in pairs(container.getObjects()) do
 				if obj.name == testDeck.name then
-					if TURMOIL_ONLY_CARDS[testDeck.name] and not configs.crisis then
-						takeDeckWithoutCards(container, obj.index, testDeck, TURMOIL_ONLY_CARDS[testDeck.name])
+					local skipped = disabledCards(testDeck.name)
+					if #skipped > 0 then
+						takeDeckWithoutCards(container, obj.index, testDeck, skipped)
 					else
 						container.takeObject({
 							index = obj.index,
