@@ -1610,6 +1610,14 @@ CONDITIONAL_CARDS = {  -- карты колоды, которые идут в и
 			"ccd775",  -- Высокотемпературные сверхпроводники
 			"ab8e41",  -- Грант, проспонсированный государством
 		},
+		venus = {
+			"52cd35",  -- Аналитический центр
+			"28448a",  -- Solarpedia
+			"ac6ca7",  -- Культивация Венеры
+			"6acfd7",  -- Экспедиция на поверхность Венеры
+			"437cd6",  -- База на Венере
+			"c12373",  -- Аэростатный урбанизм
+		},
 		colony = {
 			"8989f3",  -- Обсерватория Пойгенса
 			"e3150e",  -- Станция Кассини
@@ -1621,6 +1629,10 @@ CONDITIONAL_CARDS = {  -- карты колоды, которые идут в и
 			"9b4f3d",  -- Mars Frontier Alliance
 			"f3e838",  -- Mind Set Mars
 		},
+		venus = {
+			"6f9dd8",  -- Ambient
+			"198657",  -- Robin Haulings
+		},
 		colony = {
 			"422c3b",  -- Collegium Copernicus
 			"4e44f9",  -- Adhai High Orbit Constructions
@@ -1631,6 +1643,12 @@ CONDITIONAL_CARDS = {  -- карты колоды, которые идут в и
 			"93b7a9",  -- Марсиане с опытом
 			"a4de16",  -- Новая космическая гонка
 		},
+		venus = {
+			"986260",  -- Сначала Венера
+			"85feaf",  -- Ценные газы
+			"6097c3",  -- Редукторы CO2
+			"6b56e5",  -- Бомбардировка водородом
+		},
 		colony = {
 			"8aa2ba",  -- Колония ключевого значения
 			"6d43b3",  -- Стратегическое планирование базы
@@ -1638,11 +1656,14 @@ CONDITIONAL_CARDS = {  -- карты колоды, которые идут в и
 	},
 }
 function disabledCards(deckName)  -- условные карты колоды, для которых нет нужного дополнения
-	local guids = {}
+	local guids, seen = {}, {}  -- карта может требовать несколько дополнений
 	for dlc, cards in pairs(CONDITIONAL_CARDS[deckName] or {}) do
 		if not configs[dlc] then
 			for _, guid in ipairs(cards) do
-				table.insert(guids, guid)
+				if not seen[guid] then
+					seen[guid] = true
+					table.insert(guids, guid)
+				end
 			end
 		end
 	end

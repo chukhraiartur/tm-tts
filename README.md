@@ -8,7 +8,7 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
-- **Fixed:** Pathfinders cards that need Turmoil or Colonies stay out of the game when that expansion is off.
+- **Fixed:** Pathfinders cards that need Turmoil, Colonies or Venus stay out of the game when that expansion is off.
 - **Changed:** the «ПЕРЕРАСЧЕТ РТ» option is always on and can't be turned off.
 - **Fixed:** Titan, Enceladus and Miranda start inactive: their trade marker is placed off the track until a card that
   holds their resource appears.
