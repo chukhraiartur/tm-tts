@@ -8,6 +8,7 @@ remaining bugs in small, isolated steps.
 
 ## Latest changes
 
+- **Changed:** the «ПЕРЕРАСЧЕТ РТ» option is always on and can't be turned off.
 - **Fixed:** Titan, Enceladus and Miranda start inactive: their trade marker is placed off the track until a card that
   holds their resource appears.
 - **Added:** setup option «РАНДОМ ДОПОВ»: Corporate Era, Venus, Colonies, Turmoil, Pathfinders and Ares are rolled at
@@ -147,7 +148,7 @@ All options are set on the settings tile before the game starts:
 | Corporations / preludes to choose | How many cards each player is dealt |
 | Board | Tharsis, Hellas, Elysium or «Рандом» (one of the three at random, announced at game start) |
 | Government support | At the end of a generation the first player raises one global parameter without getting its bonus |
-| TR recalculation | Lower TR in the solar phase (Turmoil) |
+| TR recalculation | Always on and locked: −1 TR for everyone in the Turmoil phase. Not used without Turmoil |
 | Draft | Players pass cards during the research phase |
 | Mandatory Venus | The game ends only after Venus is fully terraformed |
 | Random milestones & awards | Replaces the board's milestones and awards with 5 (6 with Venus) random ones out of 62 |

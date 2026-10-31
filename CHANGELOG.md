@@ -47,6 +47,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **TR recalculation is always on.** The «ПЕРЕРАСЧЕТ РТ» setup option is now greyed out and locked on, because the
+  Turmoil rules require it. Without Turmoil it is not used.
 - **Draft** (setup option «Драфт»). The old draft passed cards automatically as soon as every player had exactly the
   expected number of cards in the hidden draft zone. It gave no feedback and hung silently on any mistake. Now, during
   the draft only, every player sees their own «Готов передать карты» button on the right side of the screen. The text is red while the

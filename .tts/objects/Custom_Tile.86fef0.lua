@@ -26,7 +26,7 @@ buttonsData = {
 	position = {0.4, 0.3, -0.565}, click_function = "Fmap"},
 	{tooltip = "Правительственная поддержка:\nВ конце поколения первый игрок повышает 1 из глобальных параметров не получая от этого бонусов",
 	position = {0.4, 0.3, -0.457}, click_function = "Fsupport"},
-	{tooltip = "Перерасчет РТ:\nУменьшать ли РТ в фазе солнечной системы при игре с дополнением 'Кризис'",
+	{tooltip = "Перерасчет РТ:\nВ фазе Кризиса у всех игроков -1 РТ\nВсегда включен, без дополнения 'Кризис' не используется",
 	position = {0.4, 0.3, -0.349}, click_function = "Fminusrt"},
 	{tooltip = "Драфт:\nВ фазе исследования игроки будут обмениваться картами, что повысит контроль над картами и позволит посмотреть больше вариантов",
 	position = {0.4, 0.3, -0.241}, click_function = "Fdraft"},
@@ -113,6 +113,7 @@ function onLoad()
 		end
 	end
 	updateCheck("map", "База")
+	setCheckActive("minusrt", false)  -- всегда включен
 end
 
 
@@ -180,9 +181,8 @@ function Fsupport()
 	config.support = not config.support
 	updateCheck("support")
 end
-function Fminusrt()
-	config.minusrt = not config.minusrt
-	updateCheck("minusrt")
+function Fminusrt(obj, color)  -- по правилам Кризиса перерасчет обязателен, без Кризиса он не используется
+	broadcastToColor("Перерасчет РТ всегда включен: без него игра с Кризисом идет не по правилам", color, {1, 0.5, 0})
 end
 function Fdraft()
 	config.draft = not config.draft
